@@ -330,7 +330,7 @@
 
     <modules>
         <module>ddq-core</module>
-        <module>domain-archetype</module>
+        <module>ddq-archetype</module>
         <module>example</module>
     </modules>
 </project>
