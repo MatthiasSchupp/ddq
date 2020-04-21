@@ -43,9 +43,6 @@
         <surefire-plugin.skip>false</surefire-plugin.skip>
     </properties>
 
-    <distributionManagement>
-    </distributionManagement>
-
     <organization>
         <name>Domain-driven</name>
         <url>domain-driven.eu</url>
