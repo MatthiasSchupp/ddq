@@ -1,0 +1,17 @@
+FROM openjdk:13-alpine
+ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+WORKDIR /deployments
+COPY target/docker-extra/run-java/run-java.sh .
+COPY target/lib/* lib/
+COPY target/*-runner.jar app.jar
+EXPOSE 8080
+
+# run with user 1001 and be prepared for be running in OpenShift too
+RUN adduser -G root --no-create-home --disabled-password 1001 \
+  && chown -R 1001 /deployments \
+  && chmod -R "g+rwX" /deployments \
+  && chmod -R "+x" /deployments/run-java.sh \
+  && chown -R 1001:root /deployments
+USER 1001
+
+ENTRYPOINT [ "/deployments/run-java.sh" ]

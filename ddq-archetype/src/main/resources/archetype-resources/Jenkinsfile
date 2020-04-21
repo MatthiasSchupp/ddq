@@ -1,0 +1,85 @@
+pipeline {
+    agent {
+        kubernetes {
+            yamlFile 'jenkins-pod.yaml'
+            defaultContainer 'maven'
+        }
+    }
+    environment {
+        DOCKER_HOST = 'tcp://localhost:2376'
+        DOCKER_CERT_PATH = '/certs/client'
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY_PUSH = 'docker.io'
+    }
+    stages {
+        stage('Compile') {
+            steps {
+                sh 'mvn -B clean compile'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package -DskipTests'
+            }
+        }
+        stage('Integration Test') {
+            steps {
+                sh 'mvn verify -Dsurefire-plugin.skip=true'
+            }
+        }
+        stage('Install') {
+            steps {
+                sh 'mvn install -DskipTests'
+            }
+        }
+        stage('Dependency Check') {
+            steps {
+                dependencyCheck odcInstallation: 'default', additionalArguments: "-s '.' -format ALL -d /root/dependency-check/"
+            }
+        }
+        stage("SonarQube") {
+            steps {
+                withSonarQubeEnv('default') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+        stage('Deploy') {
+            when { anyOf {
+                branch 'master'
+                expression { env.TAG_NAME != null }
+            } }
+            steps {
+                sh 'mvn deploy -DskipTests'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-nightly', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "mvn docker:build -Ddocker.username=${USERNAME} -Ddocker.password=${PASSWORD}"
+                }
+            }
+        }
+        stage('Docker Push') {
+            when { anyOf {
+                branch 'master'
+                expression { env.TAG_NAME != null }
+            } }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-nightly', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "mvn docker:push -Ddocker.username=${USERNAME} -Ddocker.password=${PASSWORD} -Ddocker.push.registry=${DOCKER_REGISTRY_PUSH}"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        }
+    }
+}
