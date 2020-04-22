@@ -18,8 +18,13 @@ public class Greeted extends DomainEvent {
     }
 
     @JsonbCreator
-    public Greeted(@JsonbProperty("id") UUID id, @JsonbProperty("timestamp") Instant timestamp, @JsonbProperty("greetingId") String greetingId, @JsonbProperty("person") String person) {
-        super(id, timestamp);
+    public Greeted(
+            @JsonbProperty("id") UUID id,
+            @JsonbProperty("timestamp") Instant timestamp,
+            @JsonbProperty("source") String source,
+            @JsonbProperty("greetingId") String greetingId,
+            @JsonbProperty("person") String person) {
+        super(id, timestamp, source);
         this.greetingId = greetingId;
         this.person = person;
     }

@@ -17,8 +17,13 @@ public class TestEvent extends DomainEvent {
     }
 
     @JsonbCreator
-    public TestEvent(@JsonbProperty("id") UUID id, @JsonbProperty("timestamp") Instant timestamp, @JsonbProperty("name") String name, @JsonbProperty("value") int value) {
-        super(id, timestamp);
+    public TestEvent(
+            @JsonbProperty("id") UUID id,
+            @JsonbProperty("timestamp") Instant timestamp,
+            @JsonbProperty("source") String source,
+            @JsonbProperty("name") String name,
+            @JsonbProperty("value") int value) {
+        super(id, timestamp, source);
         this.name = name;
         this.value = value;
     }

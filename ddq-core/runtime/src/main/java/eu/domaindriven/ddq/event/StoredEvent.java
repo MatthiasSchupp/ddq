@@ -55,6 +55,8 @@ public class StoredEvent implements Notifiable {
     @Column(nullable = false)
     private Class<? extends DomainEvent> type;
     @Column(nullable = false)
+    private String source;
+    @Column(nullable = false)
     private Instant timestamp;
     @Column(name = "event_group")
     private String group;
@@ -81,6 +83,7 @@ public class StoredEvent implements Notifiable {
         this.eventId = event.id();
         this.name = event.getClass().getSimpleName();
         this.type = event.getClass();
+        this.source = event.source();
         this.timestamp = event.timestamp();
         this.group = event.group().orElse(null);
         this.event = serializer.serialize(event);
@@ -107,6 +110,10 @@ public class StoredEvent implements Notifiable {
 
     public Class<? extends DomainEvent> type() {
         return type;
+    }
+
+    public String source() {
+        return source;
     }
 
     @Override

@@ -95,7 +95,7 @@ public class GreetingsResourceTest {
                 .body("_embedded.greetings", hasSize(1))
                 .extract()
                 .body()
-                .path("_embedded.greetings.greetingId[0]");
+                .path("_embedded.greetings.greetingId.id[0]");
 
         given()
                 .when().get("/resources/notifications/events")

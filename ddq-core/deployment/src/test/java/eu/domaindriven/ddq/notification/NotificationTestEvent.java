@@ -21,8 +21,14 @@ public class NotificationTestEvent extends DomainEvent {
     }
 
     @JsonbCreator
-    public NotificationTestEvent(@JsonbProperty("id") UUID id, @JsonbProperty("timestamp") Instant timestamp, @JsonbProperty("name") String name, @JsonbProperty("value") int value, @JsonbProperty("exampleTimestamp") Instant exampleTimestamp) {
-        super(id, timestamp);
+    public NotificationTestEvent(
+            @JsonbProperty("id") UUID id,
+            @JsonbProperty("timestamp") Instant timestamp,
+            @JsonbProperty("source") String source,
+            @JsonbProperty("name") String name,
+            @JsonbProperty("value") int value,
+            @JsonbProperty("exampleTimestamp") Instant exampleTimestamp) {
+        super(id, timestamp, source);
         this.name = name;
         this.value = value;
         this.exampleTimestamp = exampleTimestamp;

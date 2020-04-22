@@ -27,6 +27,8 @@ public class EventSourceClient {
 
     public static final String NOTIFICATIONS_FIELD = "notifications";
     public static final String ID_FIELD = "id";
+    public static final String NAME_FIELD = "name";
+    public static final String DETAIL_FIELD = "detail";
     @Inject
     EventReader eventReader;
 
@@ -132,16 +134,16 @@ public class EventSourceClient {
     }
 
     private static String name(JsonObject notification) {
-        if (notification.containsKey("name")) {
-            return notification.getString("name");
+        if (notification.containsKey(NAME_FIELD)) {
+            return notification.getString(NAME_FIELD);
         } else {
             throw new EventSourceFormatException("The notification has no field with the name 'name'");
         }
     }
 
     private JsonObject detail(JsonObject notification) {
-        if (notification.containsKey("detail")) {
-            return notification.getJsonObject("detail");
+        if (notification.containsKey(DETAIL_FIELD)) {
+            return notification.getJsonObject(DETAIL_FIELD);
         } else {
             throw new EventSourceFormatException("The notification has no field with the name 'detail'");
         }

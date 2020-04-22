@@ -69,13 +69,13 @@ public class EventSourceCollector implements Configurable {
     private static URI createUri(String eventSource, String protocol, String resource) {
         // Starts the event source with a protocol?
         if (eventSource.contains("://")) {
-            // Defines the event source the full path? Indicated by containing more than the protocol (://) slashes
-            return eventSource.chars().filter(ch -> ch == '/').count() > 2
+            // Defines the event source the full path? Indicated by containing more than the protocol (://) and top-level slashes
+            return eventSource.chars().filter(ch -> ch == '/').count() > 3
                     ? URI.create(eventSource)
                     : URI.create(eventSource + resource);
         } else {
             // Defines the event source the sub path?
-            return eventSource.contains("/")
+            return eventSource.chars().filter(ch -> ch == '/').count() > 1
                     ? URI.create(protocol + "://" + eventSource)
                     : URI.create(protocol + "://" + eventSource + resource);
         }
@@ -131,9 +131,17 @@ public class EventSourceCollector implements Configurable {
                 : client.current(tracker.uri());
 
         tracker.lastId(log.lastId());
-        log.domainEvents().forEach(eventStore::append);
+        log.domainEvents().stream()
+                .map(domainEvent -> defineSource(domainEvent, eventSource.name()))
+                .forEach(eventStore::append);
 
         return !log.empty();
+    }
+
+    private DomainEvent defineSource(DomainEvent domainEvent, String source) {
+        return domainEvent.source().equals("self")
+                ? domainEvent.source(source)
+                : domainEvent;
     }
 
     void handleError(String identifier, Throwable throwable) {

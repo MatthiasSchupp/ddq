@@ -2,7 +2,6 @@ package ${package}.domain.model;
 
 
 import eu.domaindriven.ddq.domain.Entity;
-import eu.domaindriven.ddq.event.Events;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -43,6 +42,6 @@ public class Greeting extends Entity {
 
     public void salute() {
         salutes++;
-        Events.publish(new Greeted(greetingId.id().toString(), person().name()));
+        publishEvent(new Greeted(greetingId.id().toString(), person().name()));
     }
 }

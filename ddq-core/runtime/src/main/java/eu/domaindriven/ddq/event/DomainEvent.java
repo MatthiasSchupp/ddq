@@ -14,15 +14,20 @@ public abstract class DomainEvent {
 
     private final UUID id;
     private final Instant timestamp;
+    private String source;
 
     public DomainEvent() {
-        this(UUID.randomUUID(), Instant.now());
+        this(UUID.randomUUID(), Instant.now(), "self");
     }
 
     @JsonbCreator
-    public DomainEvent(@JsonbProperty("id") UUID id, @JsonbProperty("timestamp") Instant timestamp) {
+    public DomainEvent(
+            @JsonbProperty("id") UUID id,
+            @JsonbProperty("timestamp") Instant timestamp,
+            @JsonbProperty("source") String source) {
         this.id = id;
         this.timestamp = timestamp;
+        this.source = source;
     }
 
     public UUID id() {
@@ -31,6 +36,15 @@ public abstract class DomainEvent {
 
     public Instant timestamp() {
         return timestamp;
+    }
+
+    public String source() {
+        return source;
+    }
+
+    DomainEvent source(String source) {
+        this.source = source;
+        return this;
     }
 
     public Optional<String> group() {

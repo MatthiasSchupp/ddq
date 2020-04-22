@@ -2,6 +2,7 @@ package ${package}.boundary;
 
 import ${package}.domain.model.Greeting;
 import ${package}.domain.model.Person;
+import ${package}.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.Representation;
 
 import javax.ws.rs.core.UriInfo;
@@ -9,12 +10,12 @@ import java.util.UUID;
 
 public class GreetingRepresentation extends Representation {
 
-    private final UUID greetingId;
+    private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
 
     public GreetingRepresentation(Greeting greeting, UriInfo uriInfo) {
-        this.greetingId = greeting.greetingId().id();
+        this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
         link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString());
@@ -22,7 +23,7 @@ public class GreetingRepresentation extends Representation {
         link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString(), "/salutes");
     }
 
-    public UUID greetingId() {
+    public GreetingId greetingId() {
         return greetingId;
     }
 
