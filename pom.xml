@@ -24,12 +24,12 @@
         <truth.version>1.0</truth.version>
         <awaitility.version>4.0.2</awaitility.version>
         <fabric8-docker-plugin.version>0.32.0</fabric8-docker-plugin.version>
+        <fabric8-docker-plugin.name-prefix>ddq</fabric8-docker-plugin.name-prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Sonar -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <!--        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>-->
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.java.source>${maven.compiler.release}</sonar.java.source>
@@ -215,7 +215,7 @@
                     <configuration>
                         <images>
                             <image>
-                                <name>domain-driven/ddq/%g/%a:%l</name>
+                                <name>${fabric8-docker-plugin.name-prefix}}/%g/%a:%l</name>
                                 <build>
                                     <contextDir>${project.basedir}</contextDir>
                                     <dockerFile>src/main/docker/Dockerfile.jvm</dockerFile>
