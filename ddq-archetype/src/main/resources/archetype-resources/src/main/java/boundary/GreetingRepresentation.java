@@ -13,13 +13,13 @@ public class GreetingRepresentation extends Representation {
     private final Person person;
     private final Integer salutes;
 
-    public GreetingRepresentation(Greeting greeting, UriInfo uriInfo, String path) {
+    public GreetingRepresentation(Greeting greeting, UriInfo uriInfo) {
         this.greetingId = greeting.greetingId().id();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
-        link("self", uriInfo.getBaseUriBuilder(), path, greeting.greetingId().id().toString());
-        link("salute", uriInfo.getBaseUriBuilder(), path, greeting.greetingId().id().toString(), "/salute");
-        link("salutes", uriInfo.getBaseUriBuilder(), path, greeting.greetingId().id().toString(), "/salutes");
+        link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString());
+        link("salute", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString(), "/salute");
+        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString(), "/salutes");
     }
 
     public UUID greetingId() {

@@ -1,6 +1,7 @@
 package eu.domaindriven.ddq.boundary;
 
 import eu.domaindriven.ddq.application.GreetingService;
+import eu.domaindriven.ddq.domain.EntityTagResponseFactory;
 import eu.domaindriven.ddq.domain.model.Greeting;
 import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
@@ -12,7 +13,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.Collection;
 import java.util.Collections;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -27,20 +27,23 @@ public class GreetingsResource {
     @Inject
     GreetingService greetingService;
 
+    @Inject
+    EntityTagResponseFactory responseFactory;
+
     @GET
     public Response greetings(@QueryParam("name") String personName, @Context UriInfo uriInfo, @Context Request request) {
         return personName != null
                 ? greetingService.greeting(new Person(personName))
-                .map(greeting -> createResponse(Collections.singletonList(greeting), uriInfo, request))
+                .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), uriInfo, request, GreetingLogRepresentation::new))
                 .orElse(Response.status(NOT_FOUND).build())
-                : createResponse(greetingService.greetings(), uriInfo, request);
+                : responseFactory.createResponse(greetingService.greetings(), uriInfo, request, GreetingLogRepresentation::new);
     }
 
     @GET
     @Path("{id}")
     public Response greeting(@PathParam("id") String id, @Context UriInfo uriInfo, @Context Request request) {
         return greetingService.greeting(new GreetingId(id))
-                .map(greeting -> createResponse(greeting, uriInfo, request))
+                .map(greeting -> responseFactory.createResponse(greeting, uriInfo, request, GreetingRepresentation::new))
                 .orElse(Response.status(NOT_FOUND).build());
     }
 
@@ -89,29 +92,6 @@ public class GreetingsResource {
                     .add("salutes", salutes)
                     .build()
             ).tag(eTag);
-        }
-
-        return builder.build();
-    }
-
-    private Response createResponse(Greeting greeting, UriInfo uriInfo, Request request) {
-        EntityTag eTag = new EntityTag(Integer.toHexString(greeting.hashCode()));
-        Response.ResponseBuilder builder = request.evaluatePreconditions(eTag);
-
-        if (builder == null) {
-            builder = Response.ok(new GreetingRepresentation(greeting, uriInfo, "greetings"))
-                    .tag(eTag);
-        }
-
-        return builder.build();
-    }
-
-    private Response createResponse(Collection<Greeting> greetings, UriInfo uriInfo, Request request) {
-        EntityTag eTag = new EntityTag(Integer.toHexString(greetings.hashCode()));
-        Response.ResponseBuilder builder = request.evaluatePreconditions(eTag);
-
-        if (builder == null) {
-            builder = Response.ok(new GreetingLogRepresentation(greetings, uriInfo, "greetings")).tag(eTag);
         }
 
         return builder.build();

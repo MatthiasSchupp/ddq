@@ -21,6 +21,7 @@ public class GreetingsResourceTest {
     URI resourcesUri;
 
     @Test
+    @Order(1)
     public void testEmptyGreetings() {
         given()
                 .when().get("/resources/greetings")
@@ -29,7 +30,7 @@ public class GreetingsResourceTest {
                 .body("_links", hasSize(1))
                 .body("_links[0].rel", is("salutes"))
                 .body("_links[0].uri", is(resourcesUri + "/greetings/salutes"))
-                .body("greetings", hasSize(0));
+                .body("_embedded.greetings", hasSize(0));
 
         given()
                 .when().get("/resources/greetings/salutes")
@@ -38,6 +39,7 @@ public class GreetingsResourceTest {
     }
 
     @Test
+    @Order(2)
     public void testCreateGreetingAndSalute() {
         String personName = "Zoey";
         JsonObject person = Json.createObjectBuilder()
@@ -81,6 +83,34 @@ public class GreetingsResourceTest {
                 .then()
                 .statusCode(200)
                 .body("salutes", is(1));
+    }
+
+    @Test
+    @Order(3)
+    public void testEventNotifications() {
+        String greetingId = given()
+                .when().get("/resources/greetings")
+                .then()
+                .statusCode(200)
+                .body("_embedded.greetings", hasSize(1))
+                .extract()
+                .body()
+                .path("_embedded.greetings.greetingId[0]");
+
+        given()
+                .when().get("/resources/notifications/events")
+                .then()
+                .statusCode(200)
+                .body("_links", hasSize(1))
+                .body("_links[0].rel", is("self"))
+                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("id", is("1,20"))
+                .body("notifications", hasSize(1))
+                .body("notifications.name", hasItem("Greeted"))
+                .body("notifications.id", hasItem(1))
+                .body("notifications.detail.greetingId", hasItem(greetingId))
+                .body("notifications.detail.person", hasItem("Zoey"))
+                .body("status", is("ACTUAL"));
     }
 
 }
