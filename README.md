@@ -167,18 +167,6 @@ public class GreetingRepresentation extends Representation {
         this.salutes = greeting.salutes();
         link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString());
     }
-
-    public GreetingId greetingId() {
-        return greetingId;
-    }
-
-    public Person person() {
-        return person;
-    }
-
-    public Integer salutes() {
-        return salutes;
-    }
 }
 ```
 ```java
@@ -186,7 +174,6 @@ public class GreetingLogRepresentation extends LogRepresentation<Greeting, Greet
 
     public GreetingLogRepresentation(Collection<Greeting> greetings, UriInfo uriInfo) {
         super(greetings, uriInfo, "greetings", GreetingRepresentation::new);
-        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", "/salutes");
     }
 }
 ```
@@ -207,8 +194,8 @@ public class GreetingsResource {
     public Response greetings(@QueryParam("name") String personName, @Context UriInfo uriInfo, @Context Request request) {
         return personName != null
                 ? greetingService.greeting(new Person(personName))
-                .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), uriInfo, request, GreetingLogRepresentation::new))
-                .orElse(Response.status(NOT_FOUND).build())
+                        .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), uriInfo, request, GreetingLogRepresentation::new))
+                        .orElse(Response.status(NOT_FOUND).build())
                 : responseFactory.createResponse(greetingService.greetings(), uriInfo, request, GreetingLogRepresentation::new);
     }
 
