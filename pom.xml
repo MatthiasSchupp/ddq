@@ -10,6 +10,8 @@
     <name>Domain-driven Quarkus - Parent</name>
     <packaging>pom</packaging>
 
+    <url>domain-driven.eu</url>
+
     <properties>
         <maven.compiler.release>14</maven.compiler.release>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -43,11 +45,6 @@
         <surefire-plugin.skip>false</surefire-plugin.skip>
     </properties>
 
-    <organization>
-        <name>Matthias Schupp</name>
-        <url>domain-driven.eu</url>
-    </organization>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -67,7 +64,6 @@
             <url>https://maven.pkg.github.com/MatthiasSchupp/ddq</url>
         </repository>
     </distributionManagement>
-
 
     <dependencyManagement>
         <dependencies>
