@@ -63,8 +63,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/OWNER/ddq</url>
+            <name>GitHub MatthiasSchupp Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/MatthiasSchupp/ddq</url>
         </repository>
     </distributionManagement>
 
