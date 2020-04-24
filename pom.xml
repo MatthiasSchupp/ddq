@@ -60,6 +60,15 @@
         <url>https://github.com/MatthiasSchupp/ddq</url>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub MatthiasSchupp Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/MatthiasSchupp/ddq</url>
+        </repository>
+    </distributionManagement>
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>
