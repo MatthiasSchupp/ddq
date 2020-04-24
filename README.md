@@ -101,7 +101,7 @@ quarkus.ddq.event.event-source.<name>.start-id=0 #optional
 ```
 
 ### Errors
-To provide a better inside in the errors occurred during of the processing of the application than simply write it in an
+To provide a better insight in the errors occurred during of the processing of the application than simply write it in an
 unstructured logfile,the extension provides the errors similar to the events.
 
 #### Publish errors
