@@ -6,7 +6,7 @@
 
     <groupId>eu.domain-driven</groupId>
     <artifactId>ddq-parent</artifactId>
-    <version>999-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>Domain-driven Quarkus - Parent</name>
     <packaging>pom</packaging>
 
@@ -160,7 +160,7 @@
                                     <artifactItem>
                                         <groupId>eu.domain-driven</groupId>
                                         <artifactId>ddq-core-deployment</artifactId>
-                                        <version>999-SNAPSHOT</version>
+                                        <version>0.1.0</version>
                                         <type>jar</type>
                                     </artifactItem>
                                 </artifactItems>
