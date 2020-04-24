@@ -44,9 +44,21 @@
     </properties>
 
     <organization>
-        <name>Domain-driven</name>
+        <name>Matthias Schupp</name>
         <url>domain-driven.eu</url>
     </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/MatthiasSchupp/ddq</url>
+    </scm>
 
     <dependencyManagement>
         <dependencies>
