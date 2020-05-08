@@ -9,6 +9,7 @@ create table if not exists error
     source            varchar(255) not null,
     stack_trace       varchar(2000),
     type              varchar(255) not null,
+    hash              varchar(255) not null unique,
     primary key (id)
 );
 
