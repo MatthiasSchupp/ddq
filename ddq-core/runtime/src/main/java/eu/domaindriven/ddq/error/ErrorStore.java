@@ -39,7 +39,7 @@ public class ErrorStore implements NotificationProvider<StoredError> {
         String exceptionMessage = throwable != null
                 ? throwable.getMessage()
                 : null;
-        Optional<StoredError> storedError = repository.byMessage(message, exceptionMessage, source, type)
+        Optional<StoredError> storedError = repository.byHash(message, exceptionMessage, source, type)
                 .map(StoredError::incrementOccurrences);
 
         if (storedError.isEmpty()) {

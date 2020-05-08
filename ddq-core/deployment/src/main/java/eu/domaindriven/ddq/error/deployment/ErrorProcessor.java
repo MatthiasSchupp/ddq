@@ -1,7 +1,6 @@
 package eu.domaindriven.ddq.error.deployment;
 
 import eu.domaindriven.ddq.error.*;
-import eu.domaindriven.ddq.error.*;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.UnremovableBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;

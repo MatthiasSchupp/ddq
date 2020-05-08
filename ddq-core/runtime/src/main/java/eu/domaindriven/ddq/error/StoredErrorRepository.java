@@ -18,16 +18,13 @@ public class StoredErrorRepository {
         em.persist(storedError);
     }
 
-    public Optional<StoredError> byMessage(String message, String exceptionMessage, Class<?> source, ErrorType type) {
-        try (Stream<StoredError> errors = em.createNamedQuery(StoredError.BY_MESSAGE, StoredError.class)
-                .setParameter("message", message)
-                .setParameter("exceptionMessage", exceptionMessage)
-                .setParameter("source", source)
-                .setParameter("type", type)
+    public Optional<StoredError> byHash(String message, String exceptionMessage, Class<?> source, ErrorType type) {
+        try (Stream<StoredError> errors = em.createNamedQuery(StoredError.BY_HASH, StoredError.class)
+                .setParameter("hash", StoredError.calculateHash(type, source, message, exceptionMessage))
                 .setMaxResults(1)
                 .getResultStream()) {
 
-            return errors.findFirst();
+            return errors.findAny();
         }
     }
 

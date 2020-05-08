@@ -8,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @SuppressWarnings("unused")
 @NamedQuery(name = StoredError.COUNT, query = "select count(error) from StoredError error")
@@ -15,14 +17,15 @@ import java.time.Instant;
 @NamedQuery(name = StoredError.MIN_ID, query = "select min(error.id) from StoredError error")
 @NamedQuery(name = StoredError.BETWEEN, query = "select error from StoredError error where error.id between :lowId and :highId order by error.id")
 @NamedQuery(name = StoredError.ALL, query = "select error from StoredError error")
-@NamedQuery(name = StoredError.BY_MESSAGE, query = "select error from StoredError error where error.message = :message and (error.exceptionMessage = :exceptionMessage or error.exceptionMessage is null and :exceptionMessage is null) and error.source = :source and error.type = :type", lockMode = LockModeType.PESSIMISTIC_WRITE)
+@NamedQuery(name = StoredError.BY_HASH, query = "select error from StoredError error where error.hash = :hash", lockMode = LockModeType.PESSIMISTIC_WRITE)
 @Entity
 @Table(name = "error")
 public class StoredError implements Serializable, Notifiable {
 
     private static final long serialVersionUID = 2162705985487616217L;
+    private static final HashCalculator HASH_CALCULATOR = new HashCalculator();
 
-    public static final String BY_MESSAGE = "StoredError.BY_MESSAGE";
+    public static final String BY_HASH = "StoredError.BY_MESSAGE";
     public static final String COUNT = "StoredError.COUNT";
     public static final String MAX_ID = "StoredError.MAX_ID";
     public static final String MIN_ID = "StoredError.MIN_ID";
@@ -60,8 +63,10 @@ public class StoredError implements Serializable, Notifiable {
     @Column(name = "last_occurrence", nullable = false)
     private Instant lastOccurrence;
 
-    public StoredError() {
-        occurrences = 1;
+    @Column(nullable = false, unique = true)
+    private String hash;
+
+    protected StoredError() {
     }
 
     StoredError(ErrorType type, Class<?> source, String message, String exceptionMessage, String stackTrace) {
@@ -71,6 +76,13 @@ public class StoredError implements Serializable, Notifiable {
         this.message = message;
         this.exceptionMessage = exceptionMessage;
         this.stackTrace = stackTrace;
+        this.occurrences = 1;
+        this.hash = calculateHash(type, source, message, exceptionMessage);
+    }
+
+    public static String calculateHash(ErrorType type, Class<?> source, String message, String exceptionMessage) {
+        String originalString = type.toString() + source.getName() + message + exceptionMessage;
+        return HASH_CALCULATOR.toHash(originalString);
     }
 
     @Override
@@ -127,5 +139,38 @@ public class StoredError implements Serializable, Notifiable {
 
     public Instant lastOccurrence() {
         return lastOccurrence;
+    }
+
+    public String hash() {
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoredError that = (StoredError) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", StoredError.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("type=" + type)
+                .add("source=" + source)
+                .add("message='" + message + "'")
+                .add("exceptionMessage='" + exceptionMessage + "'")
+                .add("stackTrace='" + stackTrace + "'")
+                .add("occurrences=" + occurrences)
+                .add("firstOccurrence=" + firstOccurrence)
+                .add("lastOccurrence=" + lastOccurrence)
+                .add("hash='" + hash + "'")
+                .toString();
     }
 }
