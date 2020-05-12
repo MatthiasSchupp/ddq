@@ -14,12 +14,12 @@ public class LogRepresentation<T extends Entity, E extends Representation> exten
     private final List<E> elements;
     private final int count;
 
-    public LogRepresentation(Collection<T> page, UriInfo uriInfo, String embeddedKey, BiFunction<T, ? super UriInfo, E> representationFactory) {
-        this.elements = page.stream()
+    public LogRepresentation(Collection<T> elements, UriInfo uriInfo, String embeddedKey, BiFunction<T, ? super UriInfo, E> representationFactory) {
+        this.elements = elements.stream()
                 .map(element -> representationFactory.apply(element, uriInfo))
                 .collect(Collectors.toList());
-        this.count = elements.size();
-        this.embedded(embeddedKey, elements);
+        this.count = this.elements.size();
+        this.embedded(embeddedKey, this.elements);
     }
 
     @Override
