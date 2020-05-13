@@ -17,9 +17,9 @@ public class GreetingRepresentation extends Representation {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
-        link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString());
-        link("salute", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString(), "/salute");
-        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString(), "/salutes");
+        link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString());
+        link("salute", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString(), "/salute");
+        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString(), "/salutes");
     }
 
     public GreetingId greetingId() {

@@ -4,7 +4,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -44,8 +43,6 @@ public abstract class UUIDValueObject extends ValueObject {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .toString();
+        return id.toString();
     }
 }
