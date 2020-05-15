@@ -1,16 +1,10 @@
 package eu.domaindriven.ddq.domain.model;
 
-import java.util.List;
+import eu.domaindriven.ddq.panache.Repository;
+
 import java.util.Optional;
 
-public interface GreetingRepository {
-    GreetingId nextId();
-
-    void add(Greeting greeting);
-
-    Optional<Greeting> byId(GreetingId greetingId);
+public interface GreetingRepository extends Repository<Greeting, GreetingId> {
 
     Optional<Greeting> byPerson(Person person);
-
-    List<Greeting> list();
 }

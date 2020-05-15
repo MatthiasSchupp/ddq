@@ -20,7 +20,7 @@ public class GreetingService {
     public Greeting create(String personName) {
         Person person = new Person(personName);
         if (greetingRepository.byPerson(person).isEmpty()) {
-            Greeting greeting = new Greeting(greetingRepository.nextId(), person);
+            Greeting greeting = new Greeting(greetingRepository.nextIdentity(), person);
             greetingRepository.add(greeting);
             return greeting;
         } else {

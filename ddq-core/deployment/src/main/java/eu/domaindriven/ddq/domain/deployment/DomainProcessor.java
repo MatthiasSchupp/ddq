@@ -1,7 +1,6 @@
 package eu.domaindriven.ddq.domain.deployment;
 
 import eu.domaindriven.ddq.domain.*;
-import eu.domaindriven.ddq.domain.*;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.hibernate.orm.deployment.AdditionalJpaModelBuildItem;
