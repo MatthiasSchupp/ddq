@@ -14,6 +14,7 @@
 
     <properties>
         <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <source-plugin.version>3.2.1</source-plugin.version>
         <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
@@ -146,7 +147,9 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${compiler-plugin.version}</version>
                     <configuration>
-                        <parameters>true</parameters>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>

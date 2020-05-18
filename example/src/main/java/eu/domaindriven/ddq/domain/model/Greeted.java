@@ -3,7 +3,6 @@ package eu.domaindriven.ddq.domain.model;
 import eu.domaindriven.ddq.event.DomainEvent;
 
 import javax.json.bind.annotation.JsonbCreator;
-import javax.json.bind.annotation.JsonbProperty;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -19,12 +18,7 @@ public class Greeted extends DomainEvent {
     }
 
     @JsonbCreator
-    public Greeted(
-            @JsonbProperty("id") UUID id,
-            @JsonbProperty("timestamp") Instant timestamp,
-            @JsonbProperty("source") String source,
-            @JsonbProperty("greetingId") String greetingId,
-            @JsonbProperty("person") String person) {
+    public Greeted(UUID id, Instant timestamp, String source, String greetingId, String person) {
         super(id, timestamp, source);
         this.greetingId = greetingId;
         this.person = person;

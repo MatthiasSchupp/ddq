@@ -3,7 +3,6 @@ package eu.domaindriven.ddq.notification;
 import eu.domaindriven.ddq.event.DomainEvent;
 
 import javax.json.bind.annotation.JsonbCreator;
-import javax.json.bind.annotation.JsonbProperty;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -21,13 +20,7 @@ public class NotificationTestEvent extends DomainEvent {
     }
 
     @JsonbCreator
-    public NotificationTestEvent(
-            @JsonbProperty("id") UUID id,
-            @JsonbProperty("timestamp") Instant timestamp,
-            @JsonbProperty("source") String source,
-            @JsonbProperty("name") String name,
-            @JsonbProperty("value") int value,
-            @JsonbProperty("exampleTimestamp") Instant exampleTimestamp) {
+    public NotificationTestEvent(UUID id, Instant timestamp, String source, String name, int value, Instant exampleTimestamp) {
         super(id, timestamp, source);
         this.name = name;
         this.value = value;

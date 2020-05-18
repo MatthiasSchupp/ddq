@@ -1,7 +1,6 @@
 package eu.domaindriven.ddq.event;
 
 import javax.json.bind.annotation.JsonbCreator;
-import javax.json.bind.annotation.JsonbProperty;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -17,12 +16,7 @@ public class TestEvent extends DomainEvent {
     }
 
     @JsonbCreator
-    public TestEvent(
-            @JsonbProperty("id") UUID id,
-            @JsonbProperty("timestamp") Instant timestamp,
-            @JsonbProperty("source") String source,
-            @JsonbProperty("name") String name,
-            @JsonbProperty("value") int value) {
+    public TestEvent(UUID id, Instant timestamp, String source, String name, int value) {
         super(id, timestamp, source);
         this.name = name;
         this.value = value;
