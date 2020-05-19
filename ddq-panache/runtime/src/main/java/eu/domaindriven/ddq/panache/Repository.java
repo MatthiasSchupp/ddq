@@ -6,8 +6,8 @@ import eu.domaindriven.ddq.domain.ValueObject;
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository<Entity extends eu.domaindriven.ddq.domain.Entity, Id extends ValueObject> {
-    Id nextIdentity();
+public interface Repository<Entity extends eu.domaindriven.ddq.domain.Entity, Id extends ValueObject, Provider extends IdentityProvider<Id>> {
+    Provider identity();
 
     void add(Entity entity);
 
@@ -18,4 +18,5 @@ public interface Repository<Entity extends eu.domaindriven.ddq.domain.Entity, Id
     Page<Entity> page(int pageSize);
 
     Page<Entity> page(int pageIndex, int pageSize);
+
 }

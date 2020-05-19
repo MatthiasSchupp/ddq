@@ -6,25 +6,23 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static io.quarkus.panache.common.Page.of;
 import static io.quarkus.panache.common.Page.ofSize;
 
-public abstract class PanacheRepository<Entity extends eu.domaindriven.ddq.domain.Entity, Id extends ValueObject> implements Repository<Entity, Id>, io.quarkus.hibernate.orm.panache.PanacheRepository<Entity> {
+public abstract class PanacheRepository<Entity extends eu.domaindriven.ddq.domain.Entity, Id extends ValueObject, Provider extends IdentityProvider<Id>> implements Repository<Entity, Id, Provider>, io.quarkus.hibernate.orm.panache.PanacheRepository<Entity> {
 
     private final String idField;
-    private final Supplier<Id> idSupplier;
+    private final Provider identityProvider;
 
-    @SuppressWarnings("BoundedWildcard")
-    public PanacheRepository(String idField, Supplier<Id> idSupplier) {
+    public PanacheRepository(String idField, Provider identityProvider) {
         this.idField = idField;
-        this.idSupplier = idSupplier;
+        this.identityProvider = identityProvider;
     }
 
     @Override
-    public Id nextIdentity() {
-        return idSupplier.get();
+    public Provider identity() {
+        return identityProvider;
     }
 
     @Override
