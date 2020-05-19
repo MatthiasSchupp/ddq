@@ -5,8 +5,6 @@ name: Maven Publish
 
 on:
   push:
-    branches:
-      - master
     tags:
       - '*'
 
