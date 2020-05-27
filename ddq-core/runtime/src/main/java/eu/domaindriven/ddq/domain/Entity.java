@@ -1,5 +1,6 @@
 package eu.domaindriven.ddq.domain;
 
+import eu.domaindriven.ddq.ServiceDiscovery;
 import eu.domaindriven.ddq.event.DomainEvent;
 import eu.domaindriven.ddq.event.Events;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,18 +35,25 @@ public abstract class Entity extends IdentifiedDomainObject {
 
     private transient Consumer<DomainEvent> eventPublisher;
 
+    private transient ServiceDiscovery serviceDiscovery;
+
     @PostLoad
-    void initEventPublisher() {
+    void initEnvironment() {
         this.eventPublisher = Events.publisher()::publish;
+        this.serviceDiscovery = new ServiceDiscovery();
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
-        initEventPublisher();
+        initEnvironment();
     }
 
     protected void publishEvent(DomainEvent event) {
         eventPublisher.accept(event);
+    }
+
+    protected <T> T lookup(Class<T> service) {
+        return serviceDiscovery.lookup(service);
     }
 
     public Long version() {
@@ -59,4 +67,5 @@ public abstract class Entity extends IdentifiedDomainObject {
     public Instant updated() {
         return updated;
     }
+
 }
