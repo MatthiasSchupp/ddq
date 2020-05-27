@@ -26,7 +26,7 @@ under the License.
 
     <requiredProperties>
         <requiredProperty key="quarksVersion">
-            <defaultValue>999-SNAPSHOT</defaultValue>
+            <defaultValue>0.2.4</defaultValue>
         </requiredProperty>
     </requiredProperties>
 
