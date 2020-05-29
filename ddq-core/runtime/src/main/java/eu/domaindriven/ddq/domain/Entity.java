@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PostLoad;
+import javax.persistence.PostPersist;
 import javax.persistence.Version;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,9 +39,14 @@ public abstract class Entity extends IdentifiedDomainObject {
     private transient ServiceDiscovery serviceDiscovery;
 
     @PostLoad
+    @PostPersist
     void initEnvironment() {
-        this.eventPublisher = Events.publisher()::publish;
-        this.serviceDiscovery = new ServiceDiscovery();
+        if (this.eventPublisher == null) {
+            this.eventPublisher = Events.publisher()::publish;
+        }
+        if (this.serviceDiscovery == null) {
+            this.serviceDiscovery = new ServiceDiscovery();
+        }
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
