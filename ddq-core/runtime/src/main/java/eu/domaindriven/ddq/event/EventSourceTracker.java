@@ -1,5 +1,7 @@
 package eu.domaindriven.ddq.event;
 
+import eu.domaindriven.ddq.UriConverter;
+
 import javax.persistence.*;
 import java.net.URI;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class EventSourceTracker {
     @Id
     private String name;
 
+    @Convert(converter = UriConverter.class)
     @Column(nullable = false)
     private URI uri;
 

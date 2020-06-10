@@ -15,9 +15,9 @@ create table if not exists error
 
 create table if not exists event_source
 (
-    name    varchar(255) not null,
+    name    varchar(255)  not null,
     last_id bigint,
-    uri     varchar(255) not null,
+    uri     varchar(1000) not null,
     version bigint,
     primary key (name)
 );
