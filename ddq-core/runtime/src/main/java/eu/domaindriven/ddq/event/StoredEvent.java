@@ -14,6 +14,7 @@ import java.util.UUID;
 @NamedQuery(name = StoredEvent.MIN_ID, query = "select min(event.id) from StoredEvent event")
 @NamedQuery(name = StoredEvent.BETWEEN, query = "select event from StoredEvent event where event.id between :lowId and :highId order by event.id")
 @NamedQuery(name = StoredEvent.SINCE, query = "select event from StoredEvent event where event.id > :id order by event.id")
+@NamedQuery(name = StoredEvent.EXIST, query = "select case when count(event) > 0 then true else false end from StoredEvent event where event.eventId = :eventId")
 @NamedQuery(name = StoredEvent.NEXT_UNPROCESSED, lockMode = LockModeType.PESSIMISTIC_WRITE,
         query = "select event from StoredEvent event " +
                 "where event.processingStatus IN (eu.domaindriven.ddq.event.EventProcessingStatus.NEW, eu.domaindriven.ddq.event.EventProcessingStatus.UNPROCESSED, eu.domaindriven.ddq.event.EventProcessingStatus.IN_PROCESS) " +
@@ -42,6 +43,7 @@ public class StoredEvent implements Notifiable {
     public static final String MIN_ID = "StoredEvent.MIN_ID";
     public static final String BETWEEN = "StoredEvent.BETWEEN";
     public static final String SINCE = "StoredEvent.SINCE";
+    public static final String EXIST = "StoredEvent.EXIST";
     public static final String NEXT_UNPROCESSED = "StoredEvent.NEXT_UNPROCESSED";
     public static final String UPDATE_PROCESSING_STATE = "StoredEvent.UPDATE_PROCESSING_STATE";
 

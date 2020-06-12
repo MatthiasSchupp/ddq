@@ -20,6 +20,12 @@ public class StoredEventRepository {
         em.persist(storedEvent);
     }
 
+    public boolean exists(UUID eventId) {
+        return em.createNamedQuery(StoredEvent.EXIST, Boolean.class)
+                .setParameter("eventId", eventId)
+                .getSingleResult();
+    }
+
     public StoredEvent updateProcessingState(StoredEvent storedEvent) {
         int updates = em.createNamedQuery(StoredEvent.UPDATE_PROCESSING_STATE)
                 .setParameter("id", storedEvent.id())

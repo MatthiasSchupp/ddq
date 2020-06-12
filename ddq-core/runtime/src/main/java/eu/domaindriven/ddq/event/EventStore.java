@@ -23,11 +23,11 @@ public class EventStore implements NotificationProvider<StoredEvent> {
     @Inject
     EventSerializer serializer;
 
-    public StoredEvent append(DomainEvent event) {
-        StoredEvent storedEvent = new StoredEvent(event, serializer);
-        repository.persist(storedEvent);
-
-        return storedEvent;
+    public void append(DomainEvent event) {
+        if (!repository.exists(event.id())) {
+            StoredEvent storedEvent = new StoredEvent(event, serializer);
+            repository.persist(storedEvent);
+        }
     }
 
     @Override
