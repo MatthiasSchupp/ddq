@@ -6,7 +6,7 @@
     <parent>
         <artifactId>ddq-panache-parent</artifactId>
         <groupId>eu.domain-driven</groupId>
-        <version>999-SNAPSHOT</version>
+        <version>0.2.8</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
