@@ -144,6 +144,7 @@ public class EventSourceCollector implements Configurable {
                 : domainEvent;
     }
 
+    @Transactional
     void handleError(String identifier, Throwable throwable) {
         errorPublisher.technical("Exception while collecting events from source ''{0}''.", this.getClass(), throwable, identifier);
     }

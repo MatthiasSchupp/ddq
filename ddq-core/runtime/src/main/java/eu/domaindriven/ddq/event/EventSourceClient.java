@@ -123,7 +123,7 @@ public class EventSourceClient {
     }
 
     private boolean considerEvent(JsonObject notification) {
-        return eventReader.isReadable(name(notification));
+        return eventReader.collectable(name(notification));
     }
 
     private Optional<DomainEvent> read(JsonObject notification) {

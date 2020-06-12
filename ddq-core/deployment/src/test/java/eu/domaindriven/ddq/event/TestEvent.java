@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @SuppressWarnings({"unused", "squid:S2160"})
+@CollectableEvent
 public class TestEvent extends DomainEvent {
 
     private final String name;

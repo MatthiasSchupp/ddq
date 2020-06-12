@@ -25,7 +25,11 @@ public class EventReader {
                 .map(type -> serializer.deserialize(event, type));
     }
 
-    public boolean isReadable(String name) {
+    public boolean readable(String name) {
         return registry.contains(name);
+    }
+
+    public boolean collectable(String name) {
+        return registry.collectable(name);
     }
 }
