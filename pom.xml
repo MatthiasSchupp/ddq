@@ -27,7 +27,7 @@
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
         <dependency-plugin.version>3.1.2</dependency-plugin.version>
-        <quarkus.version>1.3.2.Final</quarkus.version>
+        <quarkus.version>1.6.0.Final</quarkus.version>
         <truth.version>1.0</truth.version>
         <awaitility.version>4.0.2</awaitility.version>
         <fabric8-docker-plugin.version>0.32.0</fabric8-docker-plugin.version>
