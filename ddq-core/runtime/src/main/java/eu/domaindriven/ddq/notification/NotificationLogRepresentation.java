@@ -16,17 +16,21 @@ public class NotificationLogRepresentation {
     private final long size;
     private final Collection<Notification> notifications;
     @JsonbProperty("_links")
-    private final List<Link> links;
+    private final Map<String, Link> links;
 
     public NotificationLogRepresentation(NotificationLog notificationLog, UriInfo uriInfo, String path) {
         this.id = notificationLog.id().encoded();
         this.status = notificationLog.status();
         this.size = notificationLog.size();
         this.notifications = new ArrayList<>(notificationLog.notifications());
-        this.links = new ArrayList<>();
-        this.links.add(selfLink(notificationLog, uriInfo.getBaseUriBuilder(), path));
-        nextLink(notificationLog, uriInfo.getBaseUriBuilder(), path).ifPresent(links::add);
-        previousLink(notificationLog, uriInfo.getBaseUriBuilder(), path).ifPresent(links::add);
+        this.links = new HashMap<>();
+        link(selfLink(notificationLog, uriInfo.getBaseUriBuilder(), path));
+        nextLink(notificationLog, uriInfo.getBaseUriBuilder(), path).ifPresent(this::link);
+        previousLink(notificationLog, uriInfo.getBaseUriBuilder(), path).ifPresent(this::link);
+    }
+
+    private void link(Link link) {
+        links.put(link.getRel(), link);
     }
 
     public String id() {
@@ -45,8 +49,8 @@ public class NotificationLogRepresentation {
         return Collections.unmodifiableCollection(notifications);
     }
 
-    public List<Link> links() {
-        return Collections.unmodifiableList(links);
+    public Map<String, Link> links() {
+        return Collections.unmodifiableMap(links);
     }
 
     private static Link link(String relationship, String id, UriBuilder builder, String path) {

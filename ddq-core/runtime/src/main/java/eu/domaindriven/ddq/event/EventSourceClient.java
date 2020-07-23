@@ -62,12 +62,10 @@ public class EventSourceClient {
     }
 
     private Optional<URI> extractPreviousUri(JsonObject notificationLog) {
-        return notificationLog.getJsonArray("_links").stream()
-                .map(JsonValue::asJsonObject)
-                .filter(link -> link.getString("rel").equals("previous"))
-                .map(link -> link.getString("uri"))
-                .map(URI::create)
-                .findAny();
+        JsonObject links = notificationLog.getJsonObject("_links");
+        return links.containsKey("previous")
+                ? Optional.of(links.getJsonObject("previous").getString("href")).map(URI::create)
+                : Optional.empty();
     }
 
     private List<DomainEvent> extractNotifications(JsonObject notificationLog, long minId) {

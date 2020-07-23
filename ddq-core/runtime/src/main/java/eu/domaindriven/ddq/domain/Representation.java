@@ -11,17 +11,17 @@ import java.util.*;
 public abstract class Representation {
 
     @JsonbProperty("_links")
-    private final List<Link> links;
+    private final Map<String, Link> links;
     @JsonbProperty("_embedded")
     private final Map<String, Object> embedded;
 
     public Representation() {
-        links = new ArrayList<>();
+        links = new LinkedHashMap<>();
         embedded = new LinkedHashMap<>();
     }
 
     protected final Representation link(Link link) {
-        links.add(link);
+        links.put(link.getRel(), link);
 
         return this;
     }
@@ -34,8 +34,8 @@ public abstract class Representation {
         return link(createLink(relationship, uri));
     }
 
-    public List<Link> links() {
-        return Collections.unmodifiableList(links);
+    public Map<String, Link> links() {
+        return Collections.unmodifiableMap(links);
     }
 
     protected static Link createLink(String relationship, UriBuilder builder, String... paths) {

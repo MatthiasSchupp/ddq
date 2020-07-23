@@ -19,10 +19,7 @@ import java.net.URI;
 import java.time.Instant;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NotificationTest {
@@ -58,9 +55,8 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(1))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("1,20"))
                 .body("notifications", hasSize(0))
                 .body("status", is("ACTUAL"));
@@ -69,9 +65,8 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(1))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("1,20"))
                 .body("notifications", hasSize(0))
                 .body("status", is("ACTUAL"));
@@ -80,11 +75,9 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events/21,40")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(2))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/21,40"))
-                .body("_links[1].rel", is("previous"))
-                .body("_links[1].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/21,40"))
+                .body("_links.previous.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("21,40"))
                 .body("notifications", hasSize(0))
                 .body("status", is("ACTUAL"));
@@ -107,9 +100,8 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(1))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("1,20"))
                 .body("notifications", hasSize(10))
                 .body("notifications.name", hasItem("NotificationTestEvent"))
@@ -137,11 +129,9 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(2))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/21,40"))
-                .body("_links[1].rel", is("previous"))
-                .body("_links[1].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/21,40"))
+                .body("_links.previous.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("21,40"))
                 .body("notifications", hasSize(10))
                 .body("status", is("ACTUAL"));
@@ -150,11 +140,9 @@ public class NotificationTest {
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(2))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
-                .body("_links[1].rel", is("next"))
-                .body("_links[1].uri", is(resourcesUri + "/notifications/events/21,40"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links.next.href", is(resourcesUri + "/notifications/events/21,40"))
                 .body("id", is("1,20"))
                 .body("notifications", hasSize(20))
                 .body("status", is("ARCHIVED"));

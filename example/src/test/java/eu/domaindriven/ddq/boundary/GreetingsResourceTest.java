@@ -13,8 +13,9 @@ import javax.json.JsonObject;
 import java.net.URI;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,11 +31,9 @@ public class GreetingsResourceTest {
                 .when().get("/resources/greetings")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(2))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", startsWith(resourcesUri + "/greetings"))
-                .body("_links[1].rel", is("salutes"))
-                .body("_links[1].uri", is(resourcesUri + "/greetings/salutes"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/greetings"))
+                .body("_links.salutes.href", is(resourcesUri + "/greetings/salutes"))
                 .body("_embedded.greetings", hasSize(0));
 
         given()
@@ -64,18 +63,15 @@ public class GreetingsResourceTest {
                 .when().get(locationHeader)
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(3))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(locationHeader))
-                .body("_links[1].rel", is("salute"))
-                .body("_links[1].uri", is(locationHeader + "/salute"))
-                .body("_links[2].rel", is("salutes"))
-                .body("_links[2].uri", is(locationHeader + "/salutes"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(locationHeader))
+                .body("_links.salute.href", is(locationHeader + "/salute"))
+                .body("_links.salutes.href", is(locationHeader + "/salutes"))
                 .body("person.name", is(personName))
                 .body("salutes", is(0))
                 .extract()
                 .body()
-                .path("_links[1].uri");
+                .path("_links.salute.href");
 
         given()
                 .contentType(ContentType.JSON)
@@ -106,9 +102,8 @@ public class GreetingsResourceTest {
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(1))
-                .body("_links[0].rel", is("self"))
-                .body("_links[0].uri", is(resourcesUri + "/notifications/events/1,20"))
+                .body("_links", is(notNullValue()))
+                .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("1,20"))
                 .body("notifications", hasSize(1))
                 .body("notifications.name", hasItem("Greeted"))
