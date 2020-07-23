@@ -1,4 +1,4 @@
-package eu.domaindriven.ddq.infrastructure;
+package eu.domaindriven.ddq.infrastructure.persistence;
 
 import eu.domaindriven.ddq.domain.model.Greeting;
 import eu.domaindriven.ddq.domain.model.GreetingId;

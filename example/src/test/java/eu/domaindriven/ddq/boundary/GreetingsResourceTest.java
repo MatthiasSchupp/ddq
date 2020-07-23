@@ -17,7 +17,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
 
 @QuarkusTest
-@SuppressWarnings("squid:S1192")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GreetingsResourceTest {
 
@@ -31,9 +30,11 @@ public class GreetingsResourceTest {
                 .when().get("/resources/greetings")
                 .then()
                 .statusCode(200)
-                .body("_links", hasSize(1))
-                .body("_links[0].rel", is("salutes"))
-                .body("_links[0].uri", is(resourcesUri + "/greetings/salutes"))
+                .body("_links", hasSize(2))
+                .body("_links[0].rel", is("self"))
+                .body("_links[0].uri", startsWith(resourcesUri + "/greetings"))
+                .body("_links[1].rel", is("salutes"))
+                .body("_links[1].uri", is(resourcesUri + "/greetings/salutes"))
                 .body("_embedded.greetings", hasSize(0));
 
         given()

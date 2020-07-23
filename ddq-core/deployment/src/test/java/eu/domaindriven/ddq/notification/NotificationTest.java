@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
-@SuppressWarnings("squid:S1192")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NotificationTest {
 

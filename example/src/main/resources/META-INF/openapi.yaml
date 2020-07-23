@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: Example API
+  description: Greeting resources Open API documentation
+  version: "1.0"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080/
+    description: dev mode server
+
+paths: {}
+
+components:
+  schemas:
+    UUID:
+      format: uuid
+      pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+      type: string
+    URI:
+      format: uri
+      type: string
+    Links:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          href:
+            type: string
+    Person:
+      type: object
+      properties:
+        name:
+          type: string
+    GreetingId:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+    Greeting:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  $ref: '#/components/schemas/URI'
+            salute:
+              type: object
+              properties:
+                href:
+                  $ref: '#/components/schemas/URI'
+            salutes:
+              type: object
+              properties:
+                href:
+                  $ref: '#/components/schemas/URI'
+        greetingId:
+          $ref: '#/components/schemas/GreetingId'
+        person:
+          $ref: '#/components/schemas/Person'
+        salutes:
+          format: int32
+          type: integer
+    GreetingLog:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            greetings:
+              type: array
+              items:
+                $ref: '#/components/schemas/Greeting'
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  $ref: '#/components/schemas/URI'
+            salutes:
+              type: object
+              properties:
+                href:
+                  $ref: '#/components/schemas/URI'
+        count:
+          format: int32
+          type: integer
+    GreetingCreation:
+      type: object
+      properties:
+        name:
+          type: string
+    Salutes:
+      type: object
+      properties:
+        salutes:
+          format: int32
+          type: integer

@@ -6,6 +6,7 @@ import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
 
 import javax.ws.rs.core.UriInfo;
+import java.util.Objects;
 
 public class GreetingRepresentation extends Representation {
 
@@ -22,15 +23,18 @@ public class GreetingRepresentation extends Representation {
         link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString(), "/salutes");
     }
 
-    public GreetingId greetingId() {
-        return greetingId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GreetingRepresentation that = (GreetingRepresentation) o;
+        return greetingId.equals(that.greetingId) &&
+                person.equals(that.person) &&
+                salutes.equals(that.salutes);
     }
 
-    public Person person() {
-        return person;
-    }
-
-    public Integer salutes() {
-        return salutes;
+    @Override
+    public int hashCode() {
+        return Objects.hash(greetingId, person, salutes);
     }
 }

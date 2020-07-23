@@ -6,7 +6,6 @@ import javax.json.bind.annotation.JsonbCreator;
 import java.time.Instant;
 import java.util.UUID;
 
-@SuppressWarnings("squid:S2160")
 public class Greeted extends DomainEvent {
 
     private final String greetingId;

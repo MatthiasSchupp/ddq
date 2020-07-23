@@ -6,7 +6,7 @@ import javax.json.bind.annotation.JsonbCreator;
 import java.time.Instant;
 import java.util.UUID;
 
-@SuppressWarnings({"unused", "squid:S2160"})
+@SuppressWarnings("unused")
 public class NotificationTestEvent extends DomainEvent {
 
     private final String name;

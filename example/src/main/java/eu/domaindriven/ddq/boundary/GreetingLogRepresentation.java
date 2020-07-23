@@ -10,6 +10,7 @@ public class GreetingLogRepresentation extends LogRepresentation<Greeting, Greet
 
     public GreetingLogRepresentation(Collection<Greeting> greetings, UriInfo uriInfo) {
         super(greetings, uriInfo, "greetings", GreetingRepresentation::new);
+        link("self", uriInfo.getRequestUriBuilder());
         link("salutes", uriInfo.getBaseUriBuilder(), "greetings", "/salutes");
     }
 }
