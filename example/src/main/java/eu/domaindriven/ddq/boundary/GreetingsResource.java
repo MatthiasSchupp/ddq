@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.links.Link;
 import org.eclipse.microprofile.openapi.annotations.links.LinkParameter;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.ExampleObject;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -41,7 +42,9 @@ public class GreetingsResource {
     @Operation(operationId = "greetings", summary = "Get all greetings or one greeting by person name")
     @APIResponse(responseCode = "200",
                  description = "The greetings",
-                 content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(ref = "#/components/schemas/GreetingLog")),
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(ref = "#/components/schemas/GreetingLog"),
+                                    examples = {@ExampleObject(ref = "#/components/examples/GreetingLog"), @ExampleObject(ref = "#/components/examples/GreetingLogWithNameQuery")}),
                  links = {
                          @Link(name = "self", operationId = "greetings", parameters = @LinkParameter(name = "query.name", expression = "$request.query.name")),
                          @Link(name = "salutes", operationId = "salutes")
@@ -61,7 +64,9 @@ public class GreetingsResource {
     @Operation(operationId = "greeting", summary = "Get greeting by id")
     @APIResponse(responseCode = "200",
                  description = "The greeting",
-                 content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(ref = "#/components/schemas/Greeting")),
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(ref = "#/components/schemas/Greeting"),
+                                    examples = @ExampleObject(ref = "#/components/examples/Greeting")),
                  links = {
                          @Link(name = "self", operationId = "greeting", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id")),
                          @Link(name = "salutes", operationId = "salutes", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id"))
@@ -76,7 +81,8 @@ public class GreetingsResource {
 
     @POST
     @Operation(operationId = "createGreeting", summary = "Creates a greeting for the given person name")
-    @RequestBody(content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(ref = "#/components/schemas/GreetingCreation")),
+    @RequestBody(content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(ref = "#/components/schemas/GreetingCreation")),
                  required = true)
     @APIResponse(responseCode = "201",
                  description = "Greeting created")
@@ -124,7 +130,8 @@ public class GreetingsResource {
     @Operation(operationId = "salutes", summary = "Get the sum of all salutes")
     @APIResponse(responseCode = "200",
                  description = "All salutes",
-                 content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(ref = "#/components/schemas/Salutes")))
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(ref = "#/components/schemas/Salutes")))
     public Response salutes(@Context Request request) {
         int salutes = greetingService.salutes();
 

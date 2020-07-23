@@ -104,3 +104,97 @@ components:
         salutes:
           format: int32
           type: integer
+  examples:
+    GreetingLog:
+      value: {
+        "_embedded": {
+          "greetings": [
+          {
+            "_links": {
+              "self": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
+              "salute": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salute"
+              },
+              "salutes": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salutes"
+              }
+            },
+            "greetingId": {
+              "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "person": {
+              "name": "Karl"
+            },
+            "salutes": 4
+          }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/examples/resources/greetings"
+          },
+          "salutes": {
+            "href": "http://localhost:8080/examples/resources/greetings/salutes"
+          }
+        },
+        "count": 1
+      }
+    GreetingLogWithNameQuery:
+      value: {
+        "_embedded": {
+          "greetings": [
+          {
+            "_links": {
+              "self": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
+              "salute": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salute"
+              },
+              "salutes": {
+                "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salutes"
+              }
+            },
+            "greetingId": {
+              "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "person": {
+              "name": "Karl"
+            },
+            "salutes": 4
+          }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/examples/resources/greetings?name=Karl"
+          },
+          "salutes": {
+            "href": "http://localhost:8080/examples/resources/greetings/salutes"
+          }
+        },
+        "count": 1
+      }
+    Greeting:
+      value: {
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "salute": {
+            "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salute"
+          },
+          "salutes": {
+            "href": "http://localhost:8080/examples/resources/greetings/3fa85f64-5717-4562-b3fc-2c963f66afa6/salutes"
+          }
+        },
+        "greetingId": {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        },
+        "person": {
+          "name": "Karl"
+        },
+        "salutes": 4
+      }
