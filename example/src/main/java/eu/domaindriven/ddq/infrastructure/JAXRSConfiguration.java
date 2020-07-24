@@ -3,6 +3,6 @@ package eu.domaindriven.ddq.infrastructure;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("resources")
+@ApplicationPath("/resources")
 public class JAXRSConfiguration extends Application {
 }
