@@ -44,11 +44,10 @@ public class GreetingsResource {
                  description = "The greetings",
                  content = @Content(mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(ref = "#/components/schemas/GreetingLog"),
-                                    examples = {@ExampleObject(ref = "#/components/examples/GreetingLog"), @ExampleObject(ref = "#/components/examples/GreetingLogWithNameQuery")}),
-                 links = {
-                         @Link(name = "self", operationId = "greetings", parameters = @LinkParameter(name = "query.name", expression = "$request.query.name")),
-                         @Link(name = "salutes", operationId = "salutes")
-                 })
+                                    examples = {@ExampleObject(ref = "#/components/examples/GreetingLog"),
+                                                @ExampleObject(ref = "#/components/examples/GreetingLogWithNameQuery")}),
+                 links = {@Link(name = "self", operationId = "greetings", parameters = @LinkParameter(name = "query.name", expression = "$request.query.name")),
+                          @Link(name = "salutes", operationId = "salutes")})
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
     public Response greetings(@QueryParam("name") String personName, @Context UriInfo uriInfo, @Context Request request) {
@@ -67,10 +66,8 @@ public class GreetingsResource {
                  content = @Content(mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(ref = "#/components/schemas/Greeting"),
                                     examples = @ExampleObject(ref = "#/components/examples/Greeting")),
-                 links = {
-                         @Link(name = "self", operationId = "greeting", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id")),
-                         @Link(name = "salutes", operationId = "salutes", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id"))
-                 })
+                 links = {@Link(name = "self", operationId = "greeting", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id")),
+                          @Link(name = "salutes", operationId = "salutes", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id"))})
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
     public Response greeting(@PathParam("id") String id, @Context UriInfo uriInfo, @Context Request request) {
