@@ -27,6 +27,7 @@
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
         <dependency-plugin.version>3.1.2</dependency-plugin.version>
+        <gitflow-plugin.version>1.14.0</gitflow-plugin.version>
         <quarkus.version>1.6.1.Final</quarkus.version>
         <truth.version>1.0</truth.version>
         <awaitility.version>4.0.2</awaitility.version>
@@ -225,7 +226,8 @@
                             </goals>
                             <configuration>
                                 <systemProperties>
-                                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner
+                                    </native.image.path>
                                 </systemProperties>
                             </configuration>
                         </execution>
@@ -254,7 +256,8 @@
                             </goals>
                             <phase>compile</phase>
                             <configuration>
-                                <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
+                                <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}
+                                </deployment>
                             </configuration>
                         </execution>
                     </executions>
@@ -365,6 +368,16 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>com.amashchenko.maven.plugin</groupId>
+                    <artifactId>gitflow-maven-plugin</artifactId>
+                    <version>${gitflow-plugin.version}</version>
+                    <configuration>
+                        <commitMessages>
+                            <releaseStartMessage>[RELEASE] - Bump version to @{version}</releaseStartMessage>
+                        </commitMessages>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -374,6 +387,13 @@
 <!--                <artifactId>jacoco-maven-plugin</artifactId>-->
 <!--            </plugin>-->
 <!--        </plugins>-->
+
+        <plugins>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <modules>
