@@ -376,6 +376,7 @@
                         <installProject>false</installProject>
                         <gitFlowConfig>
                             <developmentBranch>master</developmentBranch>
+                            <releaseBranchPrefix/>
                         </gitFlowConfig>
                         <commitMessages>
                             <releaseStartMessage>[RELEASE] - Bump version to @{version}</releaseStartMessage>
