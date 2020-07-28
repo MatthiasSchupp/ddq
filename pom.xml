@@ -373,6 +373,10 @@
                     <artifactId>gitflow-maven-plugin</artifactId>
                     <version>${gitflow-plugin.version}</version>
                     <configuration>
+                        <installProject>false</installProject>
+                        <gitFlowConfig>
+                            <developmentBranch>master</developmentBranch>
+                        </gitFlowConfig>
                         <commitMessages>
                             <releaseStartMessage>[RELEASE] - Bump version to @{version}</releaseStartMessage>
                         </commitMessages>
