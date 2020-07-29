@@ -3,6 +3,7 @@ package eu.domaindriven.ddq.error;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class Error {
 
@@ -71,5 +72,18 @@ public class Error {
     @Override
     public int hashCode() {
         return Objects.hash(source, message, exceptionMessage);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
+                .add("source='" + source + "'")
+                .add("message='" + message + "'")
+                .add("exceptionMessage='" + exceptionMessage + "'")
+                .add("stackTrace='" + stackTrace + "'")
+                .add("occurrences=" + occurrences)
+                .add("firstOccurrence=" + firstOccurrence)
+                .add("lastOccurrence=" + lastOccurrence)
+                .toString();
     }
 }

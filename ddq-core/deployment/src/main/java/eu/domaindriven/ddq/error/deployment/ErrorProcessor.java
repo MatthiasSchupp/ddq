@@ -35,7 +35,7 @@ public class ErrorProcessor {
     @BuildStep
     AdditionalBeanBuildItem registerBeans() {
         return AdditionalBeanBuildItem.builder()
-                .addBeanClass(ErrorPublisher.class)
+                .addBeanClass(ErrorPublisherProducer.class)
                 .addBeanClass(StoredErrorRepository.class)
                 .addBeanClass(ErrorStore.class)
                 .addBeanClass(ErrorFactory.class)

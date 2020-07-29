@@ -9,38 +9,39 @@ public final class Errors {
     }
 
     public static void technical(String message, Class<?> source) {
-        publisher().technical(message, source);
+        publisher(source).technical(message, source);
     }
 
     public static void technical(String message, Class<?> source, Object... params) {
-        publisher().technical(message, source, params);
+        publisher(source).technical(message, source, params);
     }
 
     public static void technical(String message, Class<?> source, Throwable throwable) {
-        publisher().technical(message, source, throwable);
+        publisher(source).technical(message, source, throwable);
     }
 
     public static void technical(String message, Class<?> source, Throwable throwable, Object... params) {
-        publisher().technical(message, source, throwable, params);
+        publisher(source).technical(message, source, throwable, params);
     }
 
     public static void business(String message, Class<?> source) {
-        publisher().business(message, source);
+        publisher(source).business(message, source);
     }
 
     public static void business(String message, Class<?> source, Object... params) {
-        publisher().business(message, source, params);
+        publisher(source).business(message, source, params);
     }
 
     public static void business(String message, Class<?> source, Throwable throwable) {
-        publisher().business(message, source, throwable);
+        publisher(source).business(message, source, throwable);
     }
 
     public static void business(String message, Class<?> source, Throwable throwable, Object... params) {
-        publisher().business(message, source, throwable, params);
+        publisher(source).business(message, source, throwable, params);
     }
 
-    public static ErrorPublisher publisher() {
-        return Arc.container().instance(ErrorPublisher.class).get();
+    public static ErrorPublisher publisher(Class<?> source) {
+        ErrorStore errorStore = Arc.container().instance(ErrorStore.class).get();
+        return new ErrorPublisher(errorStore, source);
     }
 }

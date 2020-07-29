@@ -146,7 +146,7 @@ public class EventSourceCollector implements Configurable {
 
     @Transactional
     void handleError(String identifier, Throwable throwable) {
-        errorPublisher.technical("Exception while collecting events from source ''{0}''.", this.getClass(), throwable, identifier);
+        errorPublisher.technical("Exception while collecting events from source ''{0}''.", throwable, identifier);
     }
 
 }

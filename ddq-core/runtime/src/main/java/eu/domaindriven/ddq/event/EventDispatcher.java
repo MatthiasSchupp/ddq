@@ -68,7 +68,7 @@ public class EventDispatcher extends SelfRunningProcessor implements Configurabl
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     void reportException(DomainEvent event, Exception e) {
         LOGGER.log(ERROR, () -> "Exception while process event '" + event + "'", e);
-        errorPublisher.technical("Exception while process event ''{0}''", this.getClass(), e, event);
+        errorPublisher.technical("Exception while process event ''{0}''", e, event);
     }
 
 

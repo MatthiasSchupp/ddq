@@ -42,7 +42,7 @@ abstract class SelfRunningProcessor {
     abstract boolean process();
 
     void handleError(String identifier, Throwable throwable) {
-        errorPublisher.technical("Exception while running ''{0}''.", this.getClass(), throwable, identifier);
+        errorPublisher.technical("Exception while running ''{0}''.", throwable, identifier);
     }
 
     void onStart(@Observes StartupEvent event) {
