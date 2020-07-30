@@ -116,12 +116,12 @@ public class ExampleService {
     public void doBusinessStuff(StuffId stuffId) {
         // Do some stuff here
 
-        errorPublisher.business("Error Message", this.getClass());
+        errorPublisher.business("Error Message");
 
         try {
             // Do some stuff here
         } catch (SomeException e) {
-            errorPublisher.technical("Error Message", this.getClass(), e);
+            errorPublisher.technical("Error Message", e);
         }
     }
 }
@@ -134,6 +134,8 @@ public class Example {
         // Do some stuff here
 
         Errors.business("Error Message", this.getClass());
+        // or
+        Errors.publisher(this.getClass()).business("Error Message");
 
         try {
             // Do some stuff here
