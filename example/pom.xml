@@ -73,6 +73,10 @@
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.deviceinsight.helm</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 

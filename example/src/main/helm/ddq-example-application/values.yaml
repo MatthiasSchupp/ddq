@@ -11,7 +11,7 @@ init:
     pullPolicy: IfNotPresent
 
 image:
-  repository: docker.io/domain-driven/example/ddq-example-application
+  repository: docker.io/domain-driven/example/${artifactId}
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
