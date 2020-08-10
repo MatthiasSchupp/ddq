@@ -373,23 +373,27 @@
                 <quarkus.package.type>native</quarkus.package.type>
             </properties>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>io.fabric8</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <configuration>
+                                <images>
+                                    <image>
+                                        <name>domain-driven/ddq/%g/%a:%l-native</name>
+                                        <build>
+                                            <dockerFile>src/main/docker/Dockerfile.native</dockerFile>
+                                        </build>
+                                    </image>
+                                </images>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>domain-driven/ddq/%g/%a:%l-native</name>
-                                    <build>
-                                        <dockerFile>src/main/docker/Dockerfile.native</dockerFile>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
