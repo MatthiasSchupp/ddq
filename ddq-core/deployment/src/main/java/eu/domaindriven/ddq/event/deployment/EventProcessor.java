@@ -1,7 +1,6 @@
 package eu.domaindriven.ddq.event.deployment;
 
 import eu.domaindriven.ddq.event.*;
-import eu.domaindriven.ddq.event.*;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.BeanArchiveIndexBuildItem;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;

@@ -26,7 +26,6 @@
         <resources-plugin.version>3.1.0</resources-plugin.version>
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
-        <dependency-plugin.version>3.1.2</dependency-plugin.version>
         <quarkus.version>1.6.1.Final</quarkus.version>
         <truth.version>1.0</truth.version>
         <awaitility.version>4.0.2</awaitility.version>
@@ -175,32 +174,6 @@
                             <goals>
                                 <goal>jar</goal>
                             </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${dependency-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>unpack</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>unpack</goal>
-                            </goals>
-                            <configuration>
-                                <artifactItems>
-                                    <artifactItem>
-                                        <groupId>eu.domain-driven</groupId>
-                                        <artifactId>ddq-core-deployment</artifactId>
-                                        <version>999-SNAPSHOT</version>
-                                        <type>jar</type>
-                                    </artifactItem>
-                                </artifactItems>
-                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                                <includes>**/*.sql</includes>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
