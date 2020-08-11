@@ -182,10 +182,28 @@
                     <version>${surefire-plugin.version}</version>
                     <configuration>
                         <systemProperties>
+                            <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
                             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                            <maven.home>${maven.home}</maven.home>
                         </systemProperties>
                         <skip>${surefire-plugin.skip}</skip>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-tests</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <excludedGroups>!integration</excludedGroups>
+                                <groups>integration</groups>
+                                <systemPropertyVariables>
+                                    <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec</jacoco-agent.destfile>
+                                </systemPropertyVariables>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
@@ -352,13 +370,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.jacoco</groupId>-->
-<!--                <artifactId>jacoco-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
     </build>
 
     <profiles>

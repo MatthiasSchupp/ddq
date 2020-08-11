@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import javax.json.Json;
 import javax.json.JsonObject;
 import java.net.URI;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -26,7 +27,7 @@ public class GreetingsResourceTest {
 
     @Test
     @Order(1)
-    public void testEmptyGreetings() {
+    void testEmptyGreetings() {
         given()
                 .when().get("/resources/greetings")
                 .then()
@@ -44,7 +45,7 @@ public class GreetingsResourceTest {
 
     @Test
     @Order(2)
-    public void testCreateGreetingAndSalute() {
+    void testCreateGreetingAndSalute() {
         String personName = "Zoey";
         JsonObject person = Json.createObjectBuilder()
                 .add("name", personName)
@@ -84,11 +85,88 @@ public class GreetingsResourceTest {
                 .then()
                 .statusCode(200)
                 .body("salutes", is(1));
+
+        given()
+                .when().get(locationHeader + "/salutes")
+                .then()
+                .statusCode(200)
+                .body("salutes", is(1));
     }
 
     @Test
     @Order(3)
-    public void testEventNotifications() {
+    void testCreateExistingGreeting() {
+        String personName = "Zoey";
+        JsonObject person = Json.createObjectBuilder()
+                .add("name", personName)
+                .build();
+
+        given().body(person.toString())
+                .contentType(ContentType.JSON)
+                .when().post("/resources/greetings")
+                .then()
+                .statusCode(409);
+    }
+
+    @Test
+    @Order(4)
+    void testCreateInvalidGreeting() {
+        String personName = "Zoey";
+        JsonObject person = Json.createObjectBuilder()
+                .add("personName", personName)
+                .build();
+
+        given().body(person.toString())
+                .contentType(ContentType.JSON)
+                .when().post("/resources/greetings")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    @Order(5)
+    void testGetGreetingByPersonName() {
+        given()
+                .when().get("/resources/greetings?name=Zoey")
+                .then()
+                .statusCode(200);
+        given()
+                .when().get("/resources/greetings?name=Karl")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(6)
+    void testSaluteNonExistingGreeting() {
+        String greetingId = UUID.randomUUID().toString();
+        given()
+                .when().post("/resources/greetings/salutes/" +greetingId + "/salute")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(7)
+    void testGetSalutes() {
+        String eTag = given()
+                .when().get("/resources/greetings/salutes")
+                .then()
+                .statusCode(200)
+                .body("salutes", is(1))
+                .extract()
+                .header("ETag");
+
+        given().header("If-None-Match", eTag)
+                .when().get("/resources/greetings/salutes")
+                .then()
+                .statusCode(304)
+                .header("ETag", eTag);
+    }
+
+    @Test
+    @Order(8)
+    void testEventNotifications() {
         String greetingId = given()
                 .when().get("/resources/greetings")
                 .then()
