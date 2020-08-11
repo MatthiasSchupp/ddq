@@ -7,15 +7,22 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
@@ -43,10 +50,10 @@ public class GreetingsResourceTest {
                 .body("salutes", is(0));
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     @Order(2)
-    void testCreateGreetingAndSalute() {
-        String personName = "Zoey";
+    void testCreateGreetingAndSalute(String personName, int salutes) {
         JsonObject person = Json.createObjectBuilder()
                 .add("name", personName)
                 .build();
@@ -74,29 +81,31 @@ public class GreetingsResourceTest {
                 .body()
                 .path("_links.salute.href");
 
-        given()
-                .contentType(ContentType.JSON)
-                .when().post(saluteUri)
-                .then()
-                .statusCode(200);
+        for (int i = 0; i < salutes; i++) {
+            given()
+                    .contentType(ContentType.JSON)
+                    .when().post(saluteUri)
+                    .then()
+                    .statusCode(200);
+        }
 
         given()
                 .when().get(locationHeader)
                 .then()
                 .statusCode(200)
-                .body("salutes", is(1));
+                .body("salutes", is(salutes));
 
         given()
                 .when().get(locationHeader + "/salutes")
                 .then()
                 .statusCode(200)
-                .body("salutes", is(1));
+                .body("salutes", is(salutes));
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     @Order(3)
-    void testCreateExistingGreeting() {
-        String personName = "Zoey";
+    void testCreateExistingGreeting(String personName) {
         JsonObject person = Json.createObjectBuilder()
                 .add("name", personName)
                 .build();
@@ -108,10 +117,10 @@ public class GreetingsResourceTest {
                 .statusCode(409);
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     @Order(4)
-    void testCreateInvalidGreeting() {
-        String personName = "Zoey";
+    void testCreateInvalidGreeting(String personName) {
         JsonObject person = Json.createObjectBuilder()
                 .add("personName", personName)
                 .build();
@@ -123,11 +132,12 @@ public class GreetingsResourceTest {
                 .statusCode(400);
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     @Order(5)
-    void testGetGreetingByPersonName() {
+    void testGetGreetingByPersonName(String personName) {
         given()
-                .when().get("/resources/greetings?name=Zoey")
+                .when().get("/resources/greetings?name=" + personName)
                 .then()
                 .statusCode(200);
         given()
@@ -138,6 +148,16 @@ public class GreetingsResourceTest {
 
     @Test
     @Order(6)
+    void testGetGreetingByUnknownPersonName() {
+        String personName = UUID.randomUUID().toString();
+        given()
+                .when().get("/resources/greetings?name=" + personName)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(7)
     void testSaluteNonExistingGreeting() {
         String greetingId = UUID.randomUUID().toString();
         given()
@@ -146,14 +166,15 @@ public class GreetingsResourceTest {
                 .statusCode(404);
     }
 
-    @Test
-    @Order(7)
-    void testGetSalutes() {
+    @ParameterizedTest
+    @MethodSource("provideSumOfSalutes")
+    @Order(8)
+    void testGetSalutes(int salutes) {
         String eTag = given()
                 .when().get("/resources/greetings/salutes")
                 .then()
                 .statusCode(200)
-                .body("salutes", is(1))
+                .body("salutes", is(salutes))
                 .extract()
                 .header("ETag");
 
@@ -164,11 +185,12 @@ public class GreetingsResourceTest {
                 .header("ETag", eTag);
     }
 
-    @Test
-    @Order(8)
-    void testEventNotifications() {
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
+    @Order(9)
+    void testEventNotifications(String personName) {
         String greetingId = given()
-                .when().get("/resources/greetings")
+                .when().get("/resources/greetings?name=" + personName)
                 .then()
                 .statusCode(200)
                 .body("_embedded.greetings", hasSize(1))
@@ -183,12 +205,27 @@ public class GreetingsResourceTest {
                 .body("_links", is(notNullValue()))
                 .body("_links.self.href", is(resourcesUri + "/notifications/events/1,20"))
                 .body("id", is("1,20"))
-                .body("notifications", hasSize(1))
-                .body("notifications.name", hasItem("Greeted"))
+                .body("notifications", hasSize(greaterThan(1)))
+                .body("notifications.name", everyItem(is("Greeted")))
                 .body("notifications.id", hasItem(1))
                 .body("notifications.detail.greetingId", hasItem(greetingId))
-                .body("notifications.detail.person", hasItem("Zoey"))
+                .body("notifications.detail.findAll { it.greetingId=='" + greetingId + "' }.person[0]", is(personName))
                 .body("status", is("ACTUAL"));
     }
 
+    private static Stream<Arguments> provideSumOfSalutes() {
+        try (InputStream is = GreetingsResourceTest.class.getClassLoader().getResourceAsStream("data.csv")) {
+            String data = new String(Objects.requireNonNull(is).readAllBytes());
+            int salutes = data.lines()
+                    .skip(1)
+                    .map(s -> s.split(",")[1])
+                    .map(String::trim)
+                    .mapToInt(Integer::parseInt)
+                    .sum();
+
+            return Stream.of(Arguments.of(salutes));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 }
