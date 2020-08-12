@@ -209,7 +209,7 @@ public class GreetingsResourceTest {
                 .body("notifications.name", everyItem(is("Greeted")))
                 .body("notifications.id", hasItem(1))
                 .body("notifications.detail.greetingId", hasItem(greetingId))
-                .body("notifications.detail.findAll { it.greetingId=='" + greetingId + "' }.person[0]", is(personName))
+                .body("notifications.detail.findAll { it.greetingId=='" + greetingId + "' }.person", everyItem(is(personName)))
                 .body("status", is("ACTUAL"));
     }
 
