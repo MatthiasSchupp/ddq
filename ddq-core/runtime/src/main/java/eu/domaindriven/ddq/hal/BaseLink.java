@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface BaseLink {
 
-    String path();
+    String path() default "";
 
     String rel() default "";
 }
