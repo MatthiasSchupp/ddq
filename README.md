@@ -157,25 +157,36 @@ There are some base classes available to easily implement the domain model:
 ### HATEOAS REST resources
 HATEOAS REST endpoint with ETag support can be implemented as follows:
 ```java
-public class GreetingRepresentation extends Representation {
+public class GreetingRepresentation implements Representation {
 
     private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
 
-    public GreetingRepresentation(Greeting greeting, UriInfo uriInfo) {
+    @BaseLink(rel = "self", path = "greetings/{greetingId}")
+    private Link selfLink;
+
+    @BaseLink(rel = "salute", path = "greetings/{greetingId}/salute")
+    private Link saluteLink;
+
+    @BaseLink(rel = "salutes", path = "greetings/{greetingId}/salutes")
+    private Link salutesLink;
+
+    public GreetingRepresentation(Greeting greeting) {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
-        link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().id().toString());
     }
 }
 ```
 ```java
-public class GreetingLogRepresentation extends LogRepresentation<Greeting, GreetingRepresentation> {
+public class GreetingLogRepresentation extends LogRepresentation {
 
-    public GreetingLogRepresentation(Collection<Greeting> greetings, UriInfo uriInfo) {
-        super(greetings, uriInfo, "greetings", GreetingRepresentation::new);
+    @BaseLink(path = "greetings/salutes")
+    private Link salutes;
+
+    public GreetingLogRepresentation(Collection<Greeting> greetings) {
+        super(greetings, "greetings", GreetingRepresentation::new);
     }
 }
 ```
@@ -193,19 +204,19 @@ public class GreetingsResource {
     EntityTagResponseFactory responseFactory;
 
     @GET
-    public Response greetings(@QueryParam("name") String personName, @Context UriInfo uriInfo, @Context Request request) {
+    public Response greetings(@QueryParam("name") String personName) {
         return personName != null
                 ? greetingService.greeting(new Person(personName))
-                        .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), uriInfo, request, GreetingLogRepresentation::new))
+                        .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), GreetingLogRepresentation::new))
                         .orElse(Response.status(NOT_FOUND).build())
-                : responseFactory.createResponse(greetingService.greetings(), uriInfo, request, GreetingLogRepresentation::new);
+                : responseFactory.createResponse(greetingService.greetings(), GreetingLogRepresentation::new);
     }
 
     @GET
     @Path("{id}")
-    public Response greeting(@PathParam("id") String id, @Context UriInfo uriInfo, @Context Request request) {
+    public Response greeting(@PathParam("id") String id) {
         return greetingService.greeting(new GreetingId(id))
-                .map(greeting -> responseFactory.createResponse(greeting, uriInfo, request, GreetingRepresentation::new))
+                .map(greeting -> responseFactory.createResponse(greeting, GreetingRepresentation::new))
                 .orElse(Response.status(NOT_FOUND).build());
     }
 }

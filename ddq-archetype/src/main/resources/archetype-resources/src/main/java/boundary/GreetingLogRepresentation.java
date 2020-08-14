@@ -1,15 +1,18 @@
 package ${package}.boundary;
 
 import ${package}.domain.model.Greeting;
-import eu.domaindriven.ddq.domain.LogRepresentation;
+import eu.domaindriven.ddq.hal.BaseLink;
+import eu.domaindriven.ddq.hal.LogRepresentation;
 
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Link;
 import java.util.Collection;
 
-public class GreetingLogRepresentation extends LogRepresentation<Greeting, GreetingRepresentation> {
+public class GreetingLogRepresentation extends LogRepresentation {
 
-    public GreetingLogRepresentation(Collection<Greeting> greetings, UriInfo uriInfo) {
-        super(greetings, uriInfo, "greetings", GreetingRepresentation::new);
-        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", "/salutes");
+    @BaseLink(path = "greetings/salutes")
+    private Link salutes;
+
+    public GreetingLogRepresentation(Collection<Greeting> greetings) {
+        super(greetings, "greetings", GreetingRepresentation::new);
     }
 }

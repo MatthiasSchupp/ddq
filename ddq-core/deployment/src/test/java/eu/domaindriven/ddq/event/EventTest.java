@@ -21,7 +21,7 @@ import static org.awaitility.Awaitility.given;
 import static org.hamcrest.Matchers.is;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class EventTest {
+class EventTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
@@ -43,14 +43,14 @@ public class EventTest {
     @Test
     @Order(1)
     @Transactional
-    public void environment() {
+    void environment() {
         assertThat(businessService).isNotNull();
         assertThat(eventStore).isNotNull();
     }
 
     @Test
     @Order(2)
-    public void testPublishEvents() throws InterruptedException {
+    void testPublishEvents() throws InterruptedException {
         // Publish the events
         businessService.publishEvent1AndEvent2();
         businessService.publishEvent3();

@@ -22,7 +22,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NotificationTest {
+class NotificationTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
@@ -44,13 +44,13 @@ public class NotificationTest {
     @Test
     @Order(1)
     @Transactional
-    public void environment() {
+    void environment() {
         assertThat(eventPublisher).isNotNull();
     }
 
     @Test
     @Order(2)
-    public void testEmptyNotificationEndpoint() {
+    void testEmptyNotificationEndpoint() {
         RestAssured.given()
                 .when().get("/resources/notifications/events")
                 .then()
@@ -86,7 +86,7 @@ public class NotificationTest {
     @Test
     @Order(3)
     @Transactional
-    public void produceFirst10Events() {
+    void produceFirst10Events() {
         for (int i = 0; i < 10; i++) {
             eventPublisher.publish(new NotificationTestEvent("test", i, Instant.EPOCH));
         }
@@ -95,7 +95,7 @@ public class NotificationTest {
 
     @Test
     @Order(4)
-    public void test10EventsNotificationEndpoint() {
+    void test10EventsNotificationEndpoint() {
         RestAssured.given()
                 .when().get("/resources/notifications/events")
                 .then()
@@ -115,7 +115,7 @@ public class NotificationTest {
     @Test
     @Order(5)
     @Transactional
-    public void produceNext20Events() {
+    void produceNext20Events() {
         for (int i = 10; i < 30; i++) {
             eventPublisher.publish(new NotificationTestEvent("test", i, Instant.EPOCH));
         }
@@ -124,7 +124,7 @@ public class NotificationTest {
 
     @Test
     @Order(6)
-    public void test30EventsNotificationEndpoint() {
+    void test30EventsNotificationEndpoint() {
         RestAssured.given()
                 .when().get("/resources/notifications/events")
                 .then()

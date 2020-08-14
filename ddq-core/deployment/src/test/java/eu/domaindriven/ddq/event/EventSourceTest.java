@@ -23,7 +23,7 @@ import static org.awaitility.Awaitility.given;
 import static org.hamcrest.Matchers.is;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class EventSourceTest {
+class EventSourceTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
@@ -45,7 +45,7 @@ public class EventSourceTest {
 
     @Test
     @Order(1)
-    public void environment() {
+    void environment() {
         assertThat(eventStore).isNotNull();
         assertThat(repository).isNotNull();
         assertThat(managedExecutor).isNotNull();
@@ -54,7 +54,7 @@ public class EventSourceTest {
     @Test
     @Order(2)
     @Transactional
-    public void testEventSourceCollection() {
+    void testEventSourceCollection() {
         given().pollExecutorService(managedExecutor)
                 .await().atMost(4, TimeUnit.SECONDS)
                 .until(repository::size, is(2L));

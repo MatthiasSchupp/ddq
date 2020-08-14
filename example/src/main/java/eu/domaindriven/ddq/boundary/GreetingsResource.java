@@ -1,10 +1,10 @@
 package eu.domaindriven.ddq.boundary;
 
 import eu.domaindriven.ddq.application.GreetingService;
-import eu.domaindriven.ddq.domain.EntityTagResponseFactory;
 import eu.domaindriven.ddq.domain.model.Greeting;
 import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
+import eu.domaindriven.ddq.hal.EntityTagResponseFactory;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.links.Link;
 import org.eclipse.microprofile.openapi.annotations.links.LinkParameter;
@@ -50,12 +50,12 @@ public class GreetingsResource {
                           @Link(name = "salutes", operationId = "salutes")})
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
-    public Response greetings(@QueryParam("name") String personName, @Context UriInfo uriInfo, @Context Request request) {
+    public Response greetings(@QueryParam("name") String personName) {
         return personName != null
                 ? greetingService.greeting(new Person(personName))
-                .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), uriInfo, request, GreetingLogRepresentation::new))
+                .map(greeting -> responseFactory.createResponse(Collections.singletonList(greeting), GreetingLogRepresentation::new))
                 .orElse(Response.status(NOT_FOUND).build())
-                : responseFactory.createResponse(greetingService.greetings(), uriInfo, request, GreetingLogRepresentation::new);
+                : responseFactory.createResponse(greetingService.greetings(), GreetingLogRepresentation::new);
     }
 
     @GET
@@ -70,9 +70,9 @@ public class GreetingsResource {
                           @Link(name = "salutes", operationId = "salutes", parameters = @LinkParameter(name = "path.id", expression = "$request.path.id"))})
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
-    public Response greeting(@PathParam("id") String id, @Context UriInfo uriInfo, @Context Request request) {
+    public Response greeting(@PathParam("id") String id) {
         return greetingService.greeting(new GreetingId(id))
-                .map(greeting -> responseFactory.createResponse(greeting, uriInfo, request, GreetingRepresentation::new))
+                .map(greeting -> responseFactory.createResponse(greeting, GreetingRepresentation::new))
                 .orElse(Response.status(NOT_FOUND).build());
     }
 

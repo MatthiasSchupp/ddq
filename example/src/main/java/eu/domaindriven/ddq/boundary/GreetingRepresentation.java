@@ -1,26 +1,33 @@
 package eu.domaindriven.ddq.boundary;
 
-import eu.domaindriven.ddq.domain.Representation;
 import eu.domaindriven.ddq.domain.model.Greeting;
 import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
+import eu.domaindriven.ddq.hal.BaseLink;
+import eu.domaindriven.ddq.hal.Representation;
 
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Link;
 import java.util.Objects;
 
-public class GreetingRepresentation extends Representation {
+public class GreetingRepresentation implements Representation {
 
     private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
 
-    public GreetingRepresentation(Greeting greeting, UriInfo uriInfo) {
+    @BaseLink(rel = "self", path = "greetings/{greetingId}")
+    private Link selfLink;
+
+    @BaseLink(rel = "salute", path = "greetings/{greetingId}/salute")
+    private Link saluteLink;
+
+    @BaseLink(rel = "salutes", path = "greetings/{greetingId}/salutes")
+    private Link salutesLink;
+
+    public GreetingRepresentation(Greeting greeting) {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
-        link("self", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString());
-        link("salute", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString(), "/salute");
-        link("salutes", uriInfo.getBaseUriBuilder(), "greetings", greeting.greetingId().toString(), "/salutes");
     }
 
     @Override

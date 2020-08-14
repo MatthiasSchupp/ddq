@@ -4,19 +4,16 @@ import javax.enterprise.context.Dependent;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.util.function.BiFunction;
 
 @Dependent
 public class EntityTagResponseFactory {
 
-    public <T, R extends Representation> Response createResponse(T entity, UriInfo uriInfo, Request request, BiFunction<T, ? super UriInfo, R> representationFactory) {
-        R representation = representationFactory.apply(entity, uriInfo);
-        EntityTag eTag = createEntityTag(representation);
+    public Response createResponse(Object entity, Request request) {
+        EntityTag eTag = createEntityTag(entity);
         Response.ResponseBuilder builder = request.evaluatePreconditions(eTag);
 
         if (builder == null) {
-            builder = Response.ok(representation).tag(eTag);
+            builder = Response.ok(entity).tag(eTag);
         }
 
         return builder.build();

@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GreetingsResourceTest {
+class GreetingsResourceTest {
 
     @TestHTTPResource("/example/resources")
     URI resourcesUri;
