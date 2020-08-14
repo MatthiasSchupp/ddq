@@ -10,6 +10,8 @@ import javax.ws.rs.core.Link;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,7 +66,7 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
 
     private static Map<String, String> extractLinks(Collection<Field> fields, Map<String, Object> templateValues, Object obj) {
         return fields.stream()
-                .filter(field -> isHrefPresent(field, obj))
+                .filter(field -> isLinkActive(field, obj))
                 .collect(Collectors.toMap(HalSerializer::createRel, field -> createHref(field, obj, templateValues), (href1, href2) -> href1, HashMap::new));
     }
 
@@ -85,10 +87,31 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
         return rel;
     }
 
-    private static boolean isHrefPresent(Field field, Object obj) {
+    private static boolean isLinkActive(Field field, Object obj) {
         try {
-            return field.get(obj) != null || isLinkAnnotationPresent(field);
+            if (field.get(obj) != null) {
+                return true;
+            } else if (isLinkAnnotationPresent(field)) {
+                String condition = field.isAnnotationPresent(BaseLink.class)
+                        ? field.getAnnotation(BaseLink.class).condition()
+                        : field.getAnnotation(RequestLink.class).condition();
+
+                return condition.isBlank() || evaluateCondition(condition, obj);
+            } else {
+                return false;
+            }
+
         } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private static boolean evaluateCondition(String condition, Object obj) {
+        try {
+            Method method = obj.getClass().getMethod(condition);
+            method.trySetAccessible();
+            return (boolean) method.invoke(obj);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new IllegalStateException(e);
         }
     }

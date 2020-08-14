@@ -13,4 +13,6 @@ public @interface RequestLink {
     String path() default "";
 
     String rel() default "";
+
+    String condition() default "";
 }

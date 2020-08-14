@@ -18,7 +18,7 @@ public class GreetingRepresentation implements Representation {
     @BaseLink(rel = "self", path = GreetingsResource.PATH + "/{greetingId}")
     private Link selfLink;
 
-    @BaseLink(rel = "salute", path = GreetingsResource.PATH + "/{greetingId}/salute")
+    @BaseLink(rel = "salute", path = GreetingsResource.PATH + "/{greetingId}/salute", condition = "maxSalutesNotReached")
     private Link saluteLink;
 
     @BaseLink(rel = "salutes", path = GreetingsResource.PATH + "/{greetingId}/salutes")
@@ -28,6 +28,10 @@ public class GreetingRepresentation implements Representation {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
+    }
+
+    public boolean maxSalutesNotReached() {
+        return salutes < 100;
     }
 
     @Override
