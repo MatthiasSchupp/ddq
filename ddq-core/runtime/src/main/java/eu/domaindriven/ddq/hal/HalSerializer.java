@@ -63,7 +63,9 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
     }
 
     private static Map<String, String> extractLinks(Collection<Field> fields, Map<String, Object> templateValues, Object obj) {
-        return fields.stream().collect(Collectors.toMap(HalSerializer::createRel, field -> createHref(field, obj, templateValues), (href1, href2) -> href1, HashMap::new));
+        return fields.stream()
+                .filter(field -> isHrefPresent(field, obj))
+                .collect(Collectors.toMap(HalSerializer::createRel, field -> createHref(field, obj, templateValues), (href1, href2) -> href1, HashMap::new));
     }
 
     private static String createRel(Field field) {
@@ -83,6 +85,14 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
         return rel;
     }
 
+    private static boolean isHrefPresent(Field field, Object obj) {
+        try {
+            return field.get(obj) != null || isLinkAnnotationPresent(field);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private static String createHref(Field field, Object obj, Map<String, Object> templateValues) {
         try {
             String href;
@@ -92,7 +102,7 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
             } else if (isLinkAnnotationPresent(field)) {
                 href = createUriBuilder(field).resolveTemplates(templateValues).build().toString();
             } else {
-                href = "";
+                throw new IllegalStateException("No href present");
             }
 
             return href;
