@@ -15,13 +15,13 @@ public class GreetingRepresentation implements Representation {
     private final Person person;
     private final Integer salutes;
 
-    @BaseLink(rel = "self", path = "greetings/{greetingId}")
+    @BaseLink(rel = "self", path = GreetingsResource.PATH + "/{greetingId}")
     private Link selfLink;
 
-    @BaseLink(rel = "salute", path = "greetings/{greetingId}/salute")
+    @BaseLink(rel = "salute", path = GreetingsResource.PATH + "/{greetingId}/salute")
     private Link saluteLink;
 
-    @BaseLink(rel = "salutes", path = "greetings/{greetingId}/salutes")
+    @BaseLink(rel = "salutes", path = GreetingsResource.PATH + "/{greetingId}/salutes")
     private Link salutesLink;
 
     public GreetingRepresentation(Greeting greeting) {

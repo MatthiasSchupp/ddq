@@ -26,11 +26,13 @@ import java.util.Collections;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@Path("greetings")
+@Path(GreetingsResource.PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Transactional
 public class GreetingsResource {
+
+    public static final String PATH = "greetings";
 
     @Inject
     GreetingService greetingService;
