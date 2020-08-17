@@ -157,25 +157,51 @@ There are some base classes available to easily implement the domain model:
 ### HATEOAS REST resources
 HATEOAS REST endpoint with ETag support can be implemented as follows:
 ```java
+@BasePath(GreetingsResource.PATH)
 public class GreetingRepresentation implements Representation {
 
     private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
+    @JsonbTransient
+    private final  String personName;
 
-    @BaseLink(rel = "self", path = "greetings/{greetingId}")
+    @BaseLink(rel = "self", path = "{greetingId}")
     private Link selfLink;
 
-    @BaseLink(rel = "salute", path = "greetings/{greetingId}/salute")
+    @BaseLink(rel = "person", queryParams = @QueryParam(name = "name", values = "{personName}"))
+    private Link personLink;
+
+    @BaseLink(rel = "salute", path = "{greetingId}/salute", condition = "maxSalutesNotReached")
     private Link saluteLink;
 
-    @BaseLink(rel = "salutes", path = "greetings/{greetingId}/salutes")
+    @BaseLink(rel = "salutes", path = "{greetingId}/salutes")
     private Link salutesLink;
 
     public GreetingRepresentation(Greeting greeting) {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
+        this.personName = person.name();
+    }
+
+    public boolean maxSalutesNotReached() {
+        return salutes < 100;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GreetingRepresentation that = (GreetingRepresentation) o;
+        return greetingId.equals(that.greetingId) &&
+                person.equals(that.person) &&
+                salutes.equals(that.salutes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(greetingId, person, salutes);
     }
 }
 ```
@@ -191,11 +217,13 @@ public class GreetingLogRepresentation extends LogRepresentation {
 }
 ```
 ```java
-@Path("greetings")
+@Path(GreetingsResource.PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Transactional
 public class GreetingsResource {
+
+    public static final String PATH = "greetings";
 
     @Inject
     GreetingService greetingService;
