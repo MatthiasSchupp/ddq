@@ -77,6 +77,7 @@ class GreetingsResourceTest {
                 .body("_links.salute.href", is(locationHeader + "/salute"))
                 .body("_links.salutes.href", is(locationHeader + "/salutes"))
                 .body("person.name", is(personName))
+                .body("personName", is(nullValue()))
                 .body("salutes", is(0))
                 .extract()
                 .body()
