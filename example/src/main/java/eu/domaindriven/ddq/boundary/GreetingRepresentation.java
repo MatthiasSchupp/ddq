@@ -4,24 +4,26 @@ import eu.domaindriven.ddq.domain.model.Greeting;
 import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
 import eu.domaindriven.ddq.hal.BaseLink;
+import eu.domaindriven.ddq.hal.BasePath;
 import eu.domaindriven.ddq.hal.Representation;
 
 import javax.ws.rs.core.Link;
 import java.util.Objects;
 
+@BasePath(GreetingsResource.PATH)
 public class GreetingRepresentation implements Representation {
 
     private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
 
-    @BaseLink(rel = "self", path = GreetingsResource.PATH + "/{greetingId}")
+    @BaseLink(rel = "self", path = "{greetingId}")
     private Link selfLink;
 
-    @BaseLink(rel = "salute", path = GreetingsResource.PATH + "/{greetingId}/salute", condition = "maxSalutesNotReached")
+    @BaseLink(rel = "salute", path = "{greetingId}/salute", condition = "maxSalutesNotReached")
     private Link saluteLink;
 
-    @BaseLink(rel = "salutes", path = GreetingsResource.PATH + "/{greetingId}/salutes")
+    @BaseLink(rel = "salutes", path = "{greetingId}/salutes")
     private Link salutesLink;
 
     public GreetingRepresentation(Greeting greeting) {

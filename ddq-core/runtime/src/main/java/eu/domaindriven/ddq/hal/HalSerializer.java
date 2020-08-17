@@ -89,16 +89,14 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
 
     private static boolean isLinkActive(Field field, Object obj) {
         try {
-            if (field.get(obj) != null) {
-                return true;
-            } else if (isLinkAnnotationPresent(field)) {
+            if (isLinkAnnotationPresent(field)) {
                 String condition = field.isAnnotationPresent(BaseLink.class)
                         ? field.getAnnotation(BaseLink.class).condition()
                         : field.getAnnotation(RequestLink.class).condition();
 
                 return condition.isBlank() || evaluateCondition(condition, obj);
             } else {
-                return false;
+                return field.get(obj) != null;
             }
 
         } catch (IllegalAccessException e) {
@@ -123,7 +121,7 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
             if (link != null) {
                 href = link.getUri().toString();
             } else if (isLinkAnnotationPresent(field)) {
-                href = createUriBuilder(field).resolveTemplates(templateValues).build().toString();
+                href = createUriBuilder(field, obj).resolveTemplates(templateValues).build().toString();
             } else {
                 throw new IllegalStateException("No href present");
             }
@@ -138,9 +136,14 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
         return field.isAnnotationPresent(BaseLink.class) || field.isAnnotationPresent(RequestLink.class);
     }
 
-    private static UriBuilder createUriBuilder(Field field) {
+    private static UriBuilder createUriBuilder(Field field, Object obj) {
         if (field.isAnnotationPresent(BaseLink.class)) {
-            return uriInfo().getBaseUriBuilder().path(field.getAnnotation(BaseLink.class).path());
+            UriBuilder uriBuilder = uriInfo().getBaseUriBuilder();
+            BaseLink baseLink = field.getAnnotation(BaseLink.class);
+            if (obj.getClass().isAnnotationPresent(BasePath.class) && baseLink.useBasePath()) {
+                uriBuilder.path(obj.getClass().getAnnotation(BasePath.class).value());
+            }
+            return uriBuilder.path(baseLink.path());
         } else if (field.isAnnotationPresent(RequestLink.class)) {
             return uriInfo().getRequestUriBuilder().path(field.getAnnotation(RequestLink.class).path());
         } else {

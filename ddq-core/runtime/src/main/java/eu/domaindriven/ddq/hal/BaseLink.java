@@ -15,4 +15,6 @@ public @interface BaseLink {
     String rel() default "";
 
     String condition() default "";
+
+    boolean useBasePath() default true;
 }
