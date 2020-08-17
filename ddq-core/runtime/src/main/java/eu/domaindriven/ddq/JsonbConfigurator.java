@@ -1,8 +1,5 @@
 package eu.domaindriven.ddq;
 
-import eu.domaindriven.ddq.hal.LogRepresentationSerializer;
-import eu.domaindriven.ddq.hal.PageRepresentationSerializer;
-import eu.domaindriven.ddq.hal.RepresentationSerializer;
 import io.quarkus.jsonb.JsonbConfigCustomizer;
 
 import javax.inject.Singleton;
@@ -36,10 +33,6 @@ public class JsonbConfigurator implements JsonbConfigCustomizer {
         });
         jsonbConfig.withAdapters(new LinkAdapter());
         jsonbConfig.withAdapters(new LinkMapAdapter());
-        jsonbConfig.withSerializers(
-                new RepresentationSerializer(),
-                new LogRepresentationSerializer(),
-                new PageRepresentationSerializer());
     }
 
     private static class LinkAdapter implements JsonbAdapter<Link, JsonObject> {
