@@ -5,8 +5,10 @@ import eu.domaindriven.ddq.domain.model.GreetingId;
 import eu.domaindriven.ddq.domain.model.Person;
 import eu.domaindriven.ddq.hal.BaseLink;
 import eu.domaindriven.ddq.hal.BasePath;
+import eu.domaindriven.ddq.hal.QueryParam;
 import eu.domaindriven.ddq.hal.Representation;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.ws.rs.core.Link;
 import java.util.Objects;
 
@@ -16,9 +18,14 @@ public class GreetingRepresentation implements Representation {
     private final GreetingId greetingId;
     private final Person person;
     private final Integer salutes;
+    @JsonbTransient
+    private final  String personName;
 
     @BaseLink(rel = "self", path = "{greetingId}")
     private Link selfLink;
+
+    @BaseLink(rel = "person", queryParams = @QueryParam(name = "name", values = "{personName}"))
+    private Link personLink;
 
     @BaseLink(rel = "salute", path = "{greetingId}/salute", condition = "maxSalutesNotReached")
     private Link saluteLink;
@@ -30,6 +37,7 @@ public class GreetingRepresentation implements Representation {
         this.greetingId = greeting.greetingId();
         this.person = greeting.person();
         this.salutes = greeting.salutes();
+        this.personName = person.name();
     }
 
     public boolean maxSalutesNotReached() {

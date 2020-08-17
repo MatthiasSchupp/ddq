@@ -8,15 +8,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface BaseLink {
+public @interface QueryParam {
 
-    String path() default "";
+    String name();
 
-    String rel() default "";
-
-    String condition() default "";
-
-    boolean useBasePath() default true;
-
-    QueryParam[] queryParams() default {};
+    String[] values();
 }

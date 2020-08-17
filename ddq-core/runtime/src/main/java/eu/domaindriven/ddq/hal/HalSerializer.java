@@ -137,18 +137,29 @@ public abstract class HalSerializer<T extends HalObject> implements JsonbSeriali
     }
 
     private static UriBuilder createUriBuilder(Field field, Object obj) {
+        UriBuilder uriBuilder;
+        QueryParam[] queryParams;
         if (field.isAnnotationPresent(BaseLink.class)) {
-            UriBuilder uriBuilder = uriInfo().getBaseUriBuilder();
+            uriBuilder = uriInfo().getBaseUriBuilder();
             BaseLink baseLink = field.getAnnotation(BaseLink.class);
+            queryParams = baseLink.queryParams();
             if (obj.getClass().isAnnotationPresent(BasePath.class) && baseLink.useBasePath()) {
                 uriBuilder.path(obj.getClass().getAnnotation(BasePath.class).value());
             }
-            return uriBuilder.path(baseLink.path());
+            uriBuilder.path(baseLink.path());
         } else if (field.isAnnotationPresent(RequestLink.class)) {
-            return uriInfo().getRequestUriBuilder().path(field.getAnnotation(RequestLink.class).path());
+            RequestLink requestLink = field.getAnnotation(RequestLink.class);
+            queryParams = requestLink.queryParams();
+            uriBuilder = uriInfo().getRequestUriBuilder().path(requestLink.path());
         } else {
             throw new IllegalArgumentException("No annotation present.");
         }
+
+        for (QueryParam queryParam : queryParams) {
+            uriBuilder.queryParam(queryParam.name(), (Object[]) queryParam.values());
+        }
+
+        return uriBuilder;
     }
 
     private static void serializeLink(String rel, String href, JsonGenerator generator) {

@@ -73,6 +73,7 @@ class GreetingsResourceTest {
                 .statusCode(200)
                 .body("_links", is(notNullValue()))
                 .body("_links.self.href", is(locationHeader))
+                .body("_links.person.href", is(resourcesUri + "/greetings?name=" + personName))
                 .body("_links.salute.href", is(locationHeader + "/salute"))
                 .body("_links.salutes.href", is(locationHeader + "/salutes"))
                 .body("person.name", is(personName))

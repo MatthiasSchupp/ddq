@@ -15,4 +15,6 @@ public @interface RequestLink {
     String rel() default "";
 
     String condition() default "";
+
+    QueryParam[] queryParams() default {};
 }
