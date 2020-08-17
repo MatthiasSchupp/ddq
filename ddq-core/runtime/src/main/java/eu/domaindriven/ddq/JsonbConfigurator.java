@@ -32,9 +32,10 @@ public class JsonbConfigurator implements JsonbConfigCustomizer {
                 return false;
             }
         });
-        jsonbConfig.withAdapters(new LinkAdapter())
-                .withAdapters(new LinkMapAdapter())
-                .withAdapters(new NotificationLogIdAdapter());
+        jsonbConfig.withAdapters(
+                new LinkAdapter(),
+                new LinkMapAdapter(),
+                new NotificationLogIdAdapter());
     }
 
     private static class LinkAdapter implements JsonbAdapter<Link, JsonObject> {
