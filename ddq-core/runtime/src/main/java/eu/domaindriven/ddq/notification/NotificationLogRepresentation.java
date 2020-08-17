@@ -11,7 +11,7 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class NotificationLogRepresentation {
 
-    private final String id;
+    private final NotificationLogId id;
     private final NotificationLogStatus status;
     private final long size;
     private final Collection<Notification> notifications;
@@ -19,7 +19,7 @@ public class NotificationLogRepresentation {
     private final Map<String, Link> links;
 
     public NotificationLogRepresentation(NotificationLog notificationLog, UriInfo uriInfo, String path) {
-        this.id = notificationLog.id().encoded();
+        this.id = notificationLog.id();
         this.status = notificationLog.status();
         this.size = notificationLog.size();
         this.notifications = new ArrayList<>(notificationLog.notifications());
@@ -33,7 +33,7 @@ public class NotificationLogRepresentation {
         links.put(link.getRel(), link);
     }
 
-    public String id() {
+    public NotificationLogId id() {
         return id;
     }
 

@@ -1,5 +1,6 @@
 package eu.domaindriven.ddq;
 
+import eu.domaindriven.ddq.notification.NotificationLogId;
 import io.quarkus.jsonb.JsonbConfigCustomizer;
 
 import javax.inject.Singleton;
@@ -31,8 +32,9 @@ public class JsonbConfigurator implements JsonbConfigCustomizer {
                 return false;
             }
         });
-        jsonbConfig.withAdapters(new LinkAdapter());
-        jsonbConfig.withAdapters(new LinkMapAdapter());
+        jsonbConfig.withAdapters(new LinkAdapter())
+                .withAdapters(new LinkMapAdapter())
+                .withAdapters(new NotificationLogIdAdapter());
     }
 
     private static class LinkAdapter implements JsonbAdapter<Link, JsonObject> {
@@ -78,6 +80,18 @@ public class JsonbConfigurator implements JsonbConfigCustomizer {
             return Link.fromUri(link.getString("href"))
                     .rel(rel)
                     .build();
+        }
+    }
+
+    private static class NotificationLogIdAdapter implements JsonbAdapter<NotificationLogId, String> {
+        @Override
+        public String adaptToJson(NotificationLogId id) {
+            return id.encoded();
+        }
+
+        @Override
+        public NotificationLogId adaptFromJson(String id) {
+            return new NotificationLogId(id);
         }
     }
 }

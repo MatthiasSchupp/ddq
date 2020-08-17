@@ -40,11 +40,11 @@ public class NotificationResource {
     }
 
     private NotificationProvider<?> provider(String type) {
-        switch (type) {
-            case "events": return eventStore;
-            case "errors": return errorStore;
-            default: throw new AssertionError("Unknown notification type.");
-        }
+        return switch (type) {
+            case "events" -> eventStore;
+            case "errors" -> errorStore;
+            default -> throw new AssertionError("Unknown notification type.");
+        };
     }
 
     private Response createResponse(NotificationLog notificationLog, UriInfo uriInfo, Request request, String type) {
