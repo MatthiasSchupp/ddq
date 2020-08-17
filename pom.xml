@@ -26,7 +26,7 @@
         <resources-plugin.version>3.1.0</resources-plugin.version>
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
-        <quarkus.version>1.6.1.Final</quarkus.version>
+        <quarkus.version>1.7.0.Final</quarkus.version>
         <truth.version>1.0.1</truth.version>
         <awaitility.version>4.0.3</awaitility.version>
         <fabric8-docker-plugin.version>0.33.0</fabric8-docker-plugin.version>
@@ -71,13 +71,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-bom-deployment</artifactId>
-                <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-universe-bom</artifactId>
