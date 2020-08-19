@@ -1,7 +1,6 @@
 package eu.domaindriven.ddq.event;
 
 import eu.domaindriven.ddq.notification.*;
-import eu.domaindriven.ddq.notification.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -13,8 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Path("notifications-mock")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Produces("application/hal+json")
 public class EventSourceMock {
 
     private final NotificationProvider<NotificationEvent> notificationProvider;

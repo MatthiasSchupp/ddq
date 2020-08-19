@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class NotificationTest {
 
+    private static final String APPLICATION_HAL_JSON = "application/hal+json";
+
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class)
@@ -52,6 +54,7 @@ class NotificationTest {
     @Order(2)
     void testEmptyNotificationEndpoint() {
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -62,6 +65,7 @@ class NotificationTest {
                 .body("status", is("ACTUAL"));
 
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)
@@ -72,6 +76,7 @@ class NotificationTest {
                 .body("status", is("ACTUAL"));
 
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events/21,40")
                 .then()
                 .statusCode(200)
@@ -97,6 +102,7 @@ class NotificationTest {
     @Order(4)
     void test10EventsNotificationEndpoint() {
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -126,6 +132,7 @@ class NotificationTest {
     @Order(6)
     void test30EventsNotificationEndpoint() {
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -137,6 +144,7 @@ class NotificationTest {
                 .body("status", is("ACTUAL"));
 
         RestAssured.given()
+                .accept(APPLICATION_HAL_JSON)
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)

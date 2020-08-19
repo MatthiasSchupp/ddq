@@ -201,6 +201,7 @@ class GreetingsResourceTest {
                 .path("_embedded.greetings.greetingId.id[0]");
 
         given()
+                .accept("application/hal+json")
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)

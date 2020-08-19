@@ -20,15 +20,16 @@ import java.util.stream.Collectors;
 
 import static java.net.http.HttpResponse.BodyHandlers.ofInputStream;
 import static javax.ws.rs.core.HttpHeaders.ACCEPT;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Dependent
 public class EventSourceClient {
 
-    public static final String NOTIFICATIONS_FIELD = "notifications";
-    public static final String ID_FIELD = "id";
-    public static final String NAME_FIELD = "name";
-    public static final String DETAIL_FIELD = "detail";
+    private static final String NOTIFICATIONS_FIELD = "notifications";
+    private static final String ID_FIELD = "id";
+    private static final String NAME_FIELD = "name";
+    private static final String DETAIL_FIELD = "detail";
+    private static final String ACCEPT_HEADER = "application/hal+json";
+
     @Inject
     EventReader eventReader;
 
@@ -96,7 +97,7 @@ public class EventSourceClient {
 
     private JsonObject getNotificationLog(URI eventSource) {
         HttpRequest request = HttpRequest.newBuilder(eventSource)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(ACCEPT, ACCEPT_HEADER)
                 .build();
 
         try {
