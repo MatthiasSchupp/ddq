@@ -1,6 +1,7 @@
 package eu.domaindriven.ddq.event;
 
 import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.common.QuarkusTestResource;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -23,14 +24,13 @@ import static org.awaitility.Awaitility.given;
 import static org.hamcrest.Matchers.is;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@QuarkusTestResource(MockEventSourceTestResource.class)
 class EventSourceTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class)
                     .addClass(TestEvent.class)
-                    .addClass(EventSourceMock.class)
-                    .addClass(EventSourceMock2.class)
                     .addAsResource("event-source-application.properties", "application.properties")
             );
 
@@ -65,14 +65,14 @@ class EventSourceTest {
         EventSourceTracker tracker = trackers.get("test");
         assertThat(tracker).isNotNull();
         assertThat(tracker.name()).isEqualTo("test");
-        assertThat(tracker.uri()).isEqualTo(URI.create("http://localhost:8081/domain-test/resources/notifications-mock"));
+        assertThat(tracker.uri()).isEqualTo(URI.create("http://localhost:8086/event-source-mock-1/resources/notifications/events"));
         assertThat(tracker.lastId()).isPresent();
         assertThat(tracker.lastId()).hasValue(50);
 
         tracker = trackers.get("test-current");
         assertThat(tracker).isNotNull();
         assertThat(tracker.name()).isEqualTo("test-current");
-        assertThat(tracker.uri()).isEqualTo(URI.create("http://localhost:8081/domain-test/resources/notifications-mock-2"));
+        assertThat(tracker.uri()).isEqualTo(URI.create("http://localhost:8086/event-source-mock-2/resources/notifications/events"));
         assertThat(tracker.lastId()).isPresent();
         assertThat(tracker.lastId()).hasValue(50);
 
