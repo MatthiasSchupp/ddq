@@ -19,7 +19,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ErrorTest {
+class ErrorTest {
 
     public static final String BUSINESS_ERROR_MESSAGE = "A business error.";
     public static final String TECHNICAL_ERROR_MESSAGE = "A technical error.";
@@ -39,7 +39,7 @@ public class ErrorTest {
 
     @Test
     @Order(1)
-    public void environment() {
+    void environment() {
         assertThat(errorPublisher).isNotNull();
         assertThat(repository).isNotNull();
     }
@@ -47,7 +47,7 @@ public class ErrorTest {
     @Test
     @Order(2)
     @Transactional
-    public void testPublishErrors() {
+    void testPublishErrors() {
         errorPublisher.business(BUSINESS_ERROR_MESSAGE);
 
         List<? extends Error> errors = errors();
@@ -112,7 +112,7 @@ public class ErrorTest {
     @Test
     @Order(3)
     @Transactional
-    public void testStaticPublishErrors() {
+    void testStaticPublishErrors() {
         Errors.publisher(ErrorTest.class).technical(STATIC_ERROR_MESSAGE);
         assertThat(errors()).contains(
                 new TechnicalError(ErrorTest.class.getName(), STATIC_ERROR_MESSAGE, null, null, 1, null, null));

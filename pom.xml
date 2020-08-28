@@ -26,9 +26,10 @@
         <resources-plugin.version>3.1.0</resources-plugin.version>
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
-        <quarkus.version>1.7.0.Final</quarkus.version>
+        <quarkus.version>1.7.1.Final</quarkus.version>
         <truth.version>1.0.1</truth.version>
         <awaitility.version>4.0.3</awaitility.version>
+        <wiremock.version>2.27.1</wiremock.version>
         <fabric8-docker-plugin.version>0.33.0</fabric8-docker-plugin.version>
         <fabric8-docker-plugin.name-prefix>ddq</fabric8-docker-plugin.name-prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -115,6 +116,12 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
+            <version>${wiremock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -55,6 +55,7 @@ class NotificationTest {
     void testEmptyNotificationEndpoint() {
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -66,6 +67,7 @@ class NotificationTest {
 
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)
@@ -77,6 +79,7 @@ class NotificationTest {
 
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events/21,40")
                 .then()
                 .statusCode(200)
@@ -103,6 +106,7 @@ class NotificationTest {
     void test10EventsNotificationEndpoint() {
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -133,6 +137,7 @@ class NotificationTest {
     void test30EventsNotificationEndpoint() {
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events")
                 .then()
                 .statusCode(200)
@@ -145,6 +150,7 @@ class NotificationTest {
 
         RestAssured.given()
                 .accept(APPLICATION_HAL_JSON)
+                .auth().basic("duke", "dukePassword")
                 .when().get("/resources/notifications/events/1,20")
                 .then()
                 .statusCode(200)

@@ -2,6 +2,7 @@ package eu.domaindriven.ddq.boundary;
 
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -27,6 +28,7 @@ import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestSecurity(user = "duke", roles = {"event_observer", GreetingsResource.GREETER_ROLE})
 class GreetingsResourceTest {
 
     @TestHTTPResource("/example/resources")
@@ -53,7 +55,7 @@ class GreetingsResourceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     @Order(2)
-    void testCreateGreetingAndSalute(String personName, int salutes) {
+    void testCreateGreetingAndSalute(String personName, Integer salutes) {
         JsonObject person = Json.createObjectBuilder()
                 .add("name", personName)
                 .build();
@@ -171,7 +173,7 @@ class GreetingsResourceTest {
     @ParameterizedTest
     @MethodSource("provideSumOfSalutes")
     @Order(8)
-    void testGetSalutes(int salutes) {
+    void testGetSalutes(Integer salutes) {
         String eTag = given()
                 .when().get("/resources/greetings/salutes")
                 .then()

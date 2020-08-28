@@ -14,6 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -33,6 +34,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 public class GreetingsResource {
 
     public static final String PATH = "greetings";
+    public static final String GREETER_ROLE = "greeter";
 
     @Inject
     GreetingService greetingService;
@@ -41,6 +43,7 @@ public class GreetingsResource {
     EntityTagResponseFactory responseFactory;
 
     @GET
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "greetings", summary = "Get all greetings or one greeting by person name")
     @APIResponse(responseCode = "200",
                  description = "The greetings",
@@ -62,6 +65,7 @@ public class GreetingsResource {
 
     @GET
     @Path("{id}")
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "greeting", summary = "Get greeting by id")
     @APIResponse(responseCode = "200",
                  description = "The greeting",
@@ -79,6 +83,7 @@ public class GreetingsResource {
     }
 
     @POST
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "createGreeting", summary = "Creates a greeting for the given person name")
     @RequestBody(content = @Content(mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(ref = "#/components/schemas/GreetingCreation")),
@@ -101,6 +106,7 @@ public class GreetingsResource {
 
     @POST
     @Path("{id}/salute")
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "saluteToGreeting", summary = "Salute to the greeting")
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
@@ -112,6 +118,7 @@ public class GreetingsResource {
 
     @GET
     @Path("{id}/salutes")
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "salutesByGreeting", summary = "Get the salutes for the greeting")
     @APIResponse(responseCode = "200",
                  description = "The salutes for the greeting",
@@ -126,6 +133,7 @@ public class GreetingsResource {
 
     @GET
     @Path("salutes")
+    @RolesAllowed(GREETER_ROLE)
     @Operation(operationId = "salutes", summary = "Get the sum of all salutes")
     @APIResponse(responseCode = "200",
                  description = "All salutes",
