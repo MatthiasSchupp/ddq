@@ -127,8 +127,8 @@ public class EventSourceCollector implements Configurable {
                 .uri(eventSource.uri());
 
         EventSourceLog log = tracker.lastId().isPresent()
-                ? client.since(tracker.uri(), tracker.lastId().orElseThrow())
-                : client.current(tracker.uri());
+                ? client.since(tracker.name(), tracker.uri(), tracker.lastId().orElseThrow())
+                : client.current(tracker.name(), tracker.uri());
 
         tracker.lastId(log.lastId());
         log.domainEvents().stream()

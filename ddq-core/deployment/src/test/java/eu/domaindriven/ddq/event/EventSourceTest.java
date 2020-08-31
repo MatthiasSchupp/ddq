@@ -31,6 +31,7 @@ class EventSourceTest {
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class)
                     .addClass(TestEvent.class)
+                    .addClass(BasicAuthAuthorizationProvider.class)
                     .addAsResource("event-source-application.properties", "application.properties")
             );
 

@@ -1,6 +1,7 @@
 package eu.domaindriven.ddq.event;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static java.net.http.HttpResponse.BodyHandlers.ofInputStream;
 import static javax.ws.rs.core.HttpHeaders.ACCEPT;
+import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
 @Dependent
 public class EventSourceClient {
@@ -32,6 +34,8 @@ public class EventSourceClient {
 
     @Inject
     EventReader eventReader;
+    @Inject
+    Instance<AuthorizationProvider> authorizationProviders;
 
     private final HttpClient client;
 
@@ -39,14 +43,14 @@ public class EventSourceClient {
         client = HttpClient.newHttpClient();
     }
 
-    public EventSourceLog since(URI eventSource, long id) {
-        JsonObject notificationLog = getNotificationLog(eventSource);
+    public EventSourceLog since(String name, URI uri, long id) {
+        JsonObject notificationLog = getNotificationLog(name, uri);
         long lastId = extractHighId(notificationLog);
         List<DomainEvent> notifications = new ArrayList<>(extractNotifications(notificationLog, id));
         Optional<URI> previousUri = extractPreviousUri(notificationLog);
 
         while (previousUri.isPresent() && extractLowId(notificationLog) > id) {
-            notificationLog = getNotificationLog(previousUri.get());
+            notificationLog = getNotificationLog(name, previousUri.get());
             notifications.addAll(extractNotifications(notificationLog, id));
             previousUri = extractPreviousUri(notificationLog);
         }
@@ -54,8 +58,8 @@ public class EventSourceClient {
         return new EventSourceLog(notifications, lastId);
     }
 
-    public EventSourceLog current(URI eventSource) {
-        JsonObject notificationLog = getNotificationLog(eventSource);
+    public EventSourceLog current(String name, URI uri) {
+        JsonObject notificationLog = getNotificationLog(name, uri);
         long lastId = extractHighId(notificationLog);
         List<DomainEvent> notifications = extractNotifications(notificationLog, 0);
 
@@ -95,17 +99,22 @@ public class EventSourceClient {
                 .orElse(0);
     }
 
-    private JsonObject getNotificationLog(URI eventSource) {
-        HttpRequest request = HttpRequest.newBuilder(eventSource)
-                .header(ACCEPT, ACCEPT_HEADER)
-                .build();
+    private JsonObject getNotificationLog(String name, URI uri) {
+        HttpRequest.Builder builder = HttpRequest.newBuilder(uri)
+                .header(ACCEPT, ACCEPT_HEADER);
+        if (authorizationProviders.isResolvable()) {
+            builder.header(AUTHORIZATION, authorizationProviders.get().header(name));
+        }
+        HttpRequest request = builder.build();
 
         try {
             HttpResponse<InputStream> response = client.send(request, ofInputStream());
             if (response.statusCode() == 200) {
                 return readJson(response.body());
+            } else if (response.statusCode() == 401 || response.statusCode() == 403) {
+                throw new EventSourceAuthenticationException("Authentication failed for event source '" + name + "' with status code '" + response.statusCode() + "'");
             } else {
-                throw new IllegalStateException("Response status code was " + response.statusCode());
+                throw new EventSourceException("Response status code was '" + response.statusCode() + "'");
             }
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);

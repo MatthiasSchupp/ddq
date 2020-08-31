@@ -18,6 +18,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class MockEventSourceTestResource implements QuarkusTestResourceLifecycleManager {
 
+    private static final String CONTENT_TYPE = "application/hal+json";
+    private static final String USERNAME = "duke";
+    private static final String PASSWORD = "dukePassword";
+
     private final Map<Provider, NotificationProvider<NotificationEvent>> notificationProviders;
     private final Map<Provider, UriInfo> uriInfo;
 
@@ -46,31 +50,47 @@ public class MockEventSourceTestResource implements QuarkusTestResourceLifecycle
         uriInfo.put(Provider.EVENT_PROVIDER_1, new ResteasyUriInfo(wireMockServer.baseUrl() + "/event-source-mock-1/resources/notifications/events", "/event-source-mock-1/resources"));
         uriInfo.put(Provider.EVENT_PROVIDER_2, new ResteasyUriInfo(wireMockServer.baseUrl() + "/event-source-mock-2/resources/notifications/events", "/event-source-mock-2/resources"));
 
-        stubFor(get("/event-source-mock-1/resources/notifications/events/1,20").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_1, 1, 20))));
-        stubFor(get("/event-source-mock-1/resources/notifications/events/21,40").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_1, 21, 40))));
-        stubFor(get("/event-source-mock-1/resources/notifications/events/41,60").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_1, 41, 60))));
-        stubFor(get("/event-source-mock-1/resources/notifications/events").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(currentResponse(Provider.EVENT_PROVIDER_1, 20))));
+        stubFor(get("/event-source-mock-1/resources/notifications/events/1,20")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_1, 1, 20))));
+        stubFor(get("/event-source-mock-1/resources/notifications/events/21,40")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_1, 21, 40))));
+        stubFor(get("/event-source-mock-1/resources/notifications/events/41,60")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_1, 41, 60))));
+        stubFor(get("/event-source-mock-1/resources/notifications/events")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(currentResponse(Provider.EVENT_PROVIDER_1, 20))));
 
-        stubFor(get("/event-source-mock-2/resources/notifications/events/1,20").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_2, 1, 20))));
-        stubFor(get("/event-source-mock-2/resources/notifications/events/21,40").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_2, 21, 40))));
-        stubFor(get("/event-source-mock-2/resources/notifications/events/41,60").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(response(Provider.EVENT_PROVIDER_2, 41, 60))));
-        stubFor(get("/event-source-mock-2/resources/notifications/events").willReturn(aResponse()
-                .withHeader("Content-Type", "application/hal+json")
-                .withBody(currentResponse(Provider.EVENT_PROVIDER_2, 20))));
+        stubFor(get("/event-source-mock-2/resources/notifications/events/1,20")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_2, 1, 20))));
+        stubFor(get("/event-source-mock-2/resources/notifications/events/21,40")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_2, 21, 40))));
+        stubFor(get("/event-source-mock-2/resources/notifications/events/41,60")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(response(Provider.EVENT_PROVIDER_2, 41, 60))));
+        stubFor(get("/event-source-mock-2/resources/notifications/events")
+                .withBasicAuth(USERNAME, PASSWORD)
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", CONTENT_TYPE)
+                        .withBody(currentResponse(Provider.EVENT_PROVIDER_2, 20))));
 
         return Map.of();
     }
