@@ -26,7 +26,7 @@
         <resources-plugin.version>3.1.0</resources-plugin.version>
         <install-plugin.version>3.0.0-M1</install-plugin.version>
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
-        <quarkus.version>1.7.1.Final</quarkus.version>
+        <quarkus.version>1.8.1.Final</quarkus.version>
         <truth.version>1.0.1</truth.version>
         <awaitility.version>4.0.3</awaitility.version>
         <wiremock.version>2.27.1</wiremock.version>
