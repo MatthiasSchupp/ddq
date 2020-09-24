@@ -1,0 +1,39 @@
+POST http://localhost:8080/example/resources/greetings
+Content-Type: application/json
+Authorization: Basic duke dukePassword
+
+{
+  "name": "Zoey"
+}
+> {%
+    client.global.set("location", response.headers.valueOf("Location"))
+%}
+
+###
+
+GET {{location}}
+Accept: application/json
+Authorization: Basic duke dukePassword
+
+> {%
+    client.global.set("greetingId", response.body.greetingId.id)
+%}
+
+###
+
+GET http://localhost:8080/example/resources/greetings
+Accept: application/json
+Authorization: Basic duke dukePassword
+
+###
+
+POST http://localhost:8080/example/resources/greetings/{{greetingId}}/salute
+Content-Type: application/json
+Authorization: Basic duke dukePassword
+
+
+###
+
+GET http://localhost:8080/example/resources/notifications/events
+Accept: application/hal+json
+Authorization: Basic duke dukePassword

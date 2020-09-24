@@ -34,7 +34,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 public class GreetingsResource {
 
     public static final String PATH = "greetings";
-    public static final String GREETER_ROLE = "greeter";
+    public static final String ROLE_GREETER = "greeter";
 
     @Inject
     GreetingService greetingService;
@@ -43,7 +43,7 @@ public class GreetingsResource {
     EntityTagResponseFactory responseFactory;
 
     @GET
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "greetings", summary = "Get all greetings or one greeting by person name")
     @APIResponse(responseCode = "200",
                  description = "The greetings",
@@ -65,7 +65,7 @@ public class GreetingsResource {
 
     @GET
     @Path("{id}")
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "greeting", summary = "Get greeting by id")
     @APIResponse(responseCode = "200",
                  description = "The greeting",
@@ -83,7 +83,7 @@ public class GreetingsResource {
     }
 
     @POST
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "createGreeting", summary = "Creates a greeting for the given person name")
     @RequestBody(content = @Content(mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(ref = "#/components/schemas/GreetingCreation")),
@@ -106,7 +106,7 @@ public class GreetingsResource {
 
     @POST
     @Path("{id}/salute")
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "saluteToGreeting", summary = "Salute to the greeting")
     @APIResponse(responseCode = "404",
                  description = "Greeting not found")
@@ -118,7 +118,7 @@ public class GreetingsResource {
 
     @GET
     @Path("{id}/salutes")
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "salutesByGreeting", summary = "Get the salutes for the greeting")
     @APIResponse(responseCode = "200",
                  description = "The salutes for the greeting",
@@ -133,7 +133,7 @@ public class GreetingsResource {
 
     @GET
     @Path("salutes")
-    @RolesAllowed(GREETER_ROLE)
+    @RolesAllowed(ROLE_GREETER)
     @Operation(operationId = "salutes", summary = "Get the sum of all salutes")
     @APIResponse(responseCode = "200",
                  description = "All salutes",

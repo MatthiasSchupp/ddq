@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestSecurity(user = "duke", roles = {"event_observer", GreetingsResource.GREETER_ROLE})
+@TestSecurity(user = "duke", roles = {"event_observer", GreetingsResource.ROLE_GREETER})
 class GreetingsResourceTest {
 
     @TestHTTPResource("/example/resources")
