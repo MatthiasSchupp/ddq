@@ -364,6 +364,7 @@
     <modules>
         <module>ddq-core</module>
         <module>ddq-panache</module>
+        <module>ddq-oidc</module>
         <module>ddq-archetype</module>
         <module>example</module>
     </modules>
