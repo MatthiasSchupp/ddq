@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.concurrent.Executors;
 
-abstract class SelfRunningProcessor {
+public abstract class SelfRunningProcessor {
 
     @Inject
     ErrorPublisher errorPublisher;
@@ -39,7 +39,7 @@ abstract class SelfRunningProcessor {
     protected abstract ManagedExecutor managedExecutor();
 
     @Transactional
-    abstract boolean process();
+    public abstract boolean process();
 
     void handleError(String identifier, Throwable throwable) {
         errorPublisher.technical("Exception while running ''{0}''.", throwable, identifier);

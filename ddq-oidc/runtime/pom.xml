@@ -19,6 +19,10 @@
             <artifactId>ddq-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

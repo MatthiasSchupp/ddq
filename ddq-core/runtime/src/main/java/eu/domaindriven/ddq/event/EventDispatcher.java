@@ -48,7 +48,7 @@ public class EventDispatcher extends SelfRunningProcessor implements Configurabl
     @SuppressWarnings("RedundantTypeArguments")
     @Override
     @Transactional
-    boolean process() {
+    public boolean process() {
         Optional<StoredEvent> storedEvent = eventStore.nextUnprocessed(Instant.now().minus(processingThreshold));
         storedEvent.map(StoredEvent::<DomainEvent>toDomainEvent)
                 .ifPresent(this::dispatchEvent);
