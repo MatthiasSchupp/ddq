@@ -6,6 +6,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.oauth2.AccessToken;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
@@ -31,6 +32,7 @@ public class TokenManager {
         executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
+    @PostConstruct
     void init() {
         executorService.scheduleAtFixedRate(this::refreshTokens, 60, 1, TimeUnit.SECONDS);
     }
