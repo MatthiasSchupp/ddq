@@ -28,7 +28,7 @@
         <deploy-plugin.version>3.0.0-M1</deploy-plugin.version>
         <quarkus.version>1.8.1.Final</quarkus.version>
         <truth.version>1.0.1</truth.version>
-        <wiremock.version>2.27.1</wiremock.version>
+        <wiremock.version>2.35.1</wiremock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
